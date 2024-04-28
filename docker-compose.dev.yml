@@ -1,0 +1,78 @@
+version: "3.8"
+
+volumes:
+  postgres_data:
+  redis_data:
+
+services:
+  traefik:
+    image: "traefik:v2.9.4"
+    container_name: parlo_traefik
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml
+      - ./traefik/certs:/etc/certs
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.parlo.dev`)"
+      - "traefik.http.routers.traefik.entrypoints=web,websecure"
+      - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+
+  db:
+    image: postgres:15.0-alpine
+    container_name: parlo_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-parlo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-placeholder}
+      PGDATA: /data/postgres
+      POSTGRES_MULTIPLE_DATABASES: parlo,parlo_test
+    volumes:
+      - ./pg-init-scripts:/docker-entrypoint-initdb.d
+      - postgres_data:/data/postgres
+    ports:
+      - 5432:5432
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: parlo_redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    ports:
+      - 6379:6379
+
+  backend:
+    image: backend
+    container_name: parlo_backend
+    restart: unless-stopped
+    command: ["./scripts/start.dev.sh"]
+    depends_on:
+      - db
+    build:
+      context: ./backend
+      dockerfile: $PARLO_PATH/backend/Dockerfile.dev
+    volumes:
+      - $PARLO_PATH/backend:/app:delegated
+    environment:
+      - PARLO_API_URL=https://api.parlo.dev
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-parlo}:${POSTGRES_PASSWORD:-placeholder}@db:5432/${POSTGRES_DB:-parlo}
+      - DATABASE_TEST_URL=postgresql://${POSTGRES_USER:-parlo}:${POSTGRES_PASSWORD:-placeholder}@db:5432/${POSTGRES_DB:-parlo_test}
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE:-secret-key-base-format-hex-64}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend_http.rule=Host(`api.parlo.dev`)"
+      - "traefik.http.routers.backend_http.entrypoints=web"
+      - "traefik.http.routers.backend_http.service=backend"
+      - "traefik.http.services.backend_http.loadbalancer.server.port=3000"
+      - "traefik.http.routers.backend.rule=Host(`api.parlo.dev`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.service=backend"
+      - "traefik.http.routers.backend.tls=true"
+      - "traefik.http.services.backend.loadbalancer.server.port=3000"
