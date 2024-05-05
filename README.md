@@ -2,7 +2,7 @@
 
 ### Notes and initial steps:
 1. Install Homebrew
-2. `sudo vim /etc/hosts`
+2. `brew install openssl`
 3. Install Docker Desktop
 
 
@@ -26,6 +26,6 @@
 ```
 cd $PARLO_PATH
 docker-compose -f docker-compose.dev.yml up -d db redis traefik
-docker-compose -f docker-compose.dev.yml up api
+docker-compose -f docker-compose.dev.yml up backend
 ```
 13. Visit `https://api.parlo.dev`
