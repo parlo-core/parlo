@@ -27,5 +27,8 @@
 cd $PARLO_PATH
 docker-compose -f docker-compose.dev.yml up -d db redis traefik
 docker-compose -f docker-compose.dev.yml up backend
+
+# If you want to go inside backend container:
+docker-compose -f docker-compose.dev.yml exec backend bash
 ```
 13. Visit `https://api.parlo.dev`
