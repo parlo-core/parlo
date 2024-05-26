@@ -13,8 +13,12 @@ gem "rack-cors"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
+  gem 'rspec-rails'
+end
+
+group :test do
+  gem 'database_cleaner-active_record'
 end
 
 group :development do
 end
-

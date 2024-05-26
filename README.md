@@ -32,3 +32,9 @@ docker-compose -f docker-compose.dev.yml up backend
 docker-compose -f docker-compose.dev.yml exec backend bash
 ```
 13. Visit `https://api.parlo.dev`
+
+RUNNING TESTS LOCALLY:
+1. Go into parlo folder
+2. docker-compose -f docker-compose.dev.yml exec backend bash
+3. rails db:test:prepare
+4. bundle exec rspec
