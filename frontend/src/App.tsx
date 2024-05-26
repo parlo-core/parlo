@@ -1,42 +1,27 @@
-import { Authenticated, GitHubBanner, Refine } from "@refinedev/core";
-import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
-import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
+import { Authenticated, GitHubBanner, Refine } from "@refinedev/core"
+import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools"
+import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar"
 
-import {
-  ErrorComponent,
-  notificationProvider,
-  RefineSnackbarProvider,
-  ThemedLayoutV2,
-} from "@refinedev/mui";
+import { ErrorComponent, notificationProvider, RefineSnackbarProvider, ThemedLayoutV2 } from "@refinedev/mui"
 
-import CssBaseline from "@mui/material/CssBaseline";
-import GlobalStyles from "@mui/material/GlobalStyles";
+import CssBaseline from "@mui/material/CssBaseline"
+import GlobalStyles from "@mui/material/GlobalStyles"
 import routerBindings, {
   CatchAllNavigate,
   DocumentTitleHandler,
   NavigateToResource,
-  UnsavedChangesNotifier,
-} from "@refinedev/react-router-v6";
-import dataProvider from "@refinedev/simple-rest";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
-import { authProvider } from "./authProvider";
-import { Header } from "./components/header";
-import { ColorModeContextProvider } from "./contexts/color-mode";
-import {
-  BlogPostCreate,
-  BlogPostEdit,
-  BlogPostList,
-  BlogPostShow,
-} from "./pages/blog-posts";
-import {
-  CategoryCreate,
-  CategoryEdit,
-  CategoryList,
-  CategoryShow,
-} from "./pages/categories";
-import { ForgotPassword } from "./pages/forgotPassword";
-import { Login } from "./pages/login";
-import { Register } from "./pages/register";
+  UnsavedChangesNotifier
+} from "@refinedev/react-router-v6"
+import dataProvider from "@refinedev/simple-rest"
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom"
+import { authProvider } from "./authProvider"
+import { Header } from "./components"
+import { ColorModeContextProvider } from "./contexts/color-mode"
+import { BlogPostCreate, BlogPostEdit, BlogPostList, BlogPostShow } from "./pages/blog-posts"
+import { CategoryCreate, CategoryEdit, CategoryList, CategoryShow } from "./pages/categories"
+import { ForgotPassword } from "./pages/forgotPassword"
+import { Login } from "./pages/login"
+import { Register } from "./pages/register"
 
 function App() {
   return (
@@ -61,8 +46,8 @@ function App() {
                     edit: "/blog-posts/edit/:id",
                     show: "/blog-posts/show/:id",
                     meta: {
-                      canDelete: true,
-                    },
+                      canDelete: true
+                    }
                   },
                   {
                     name: "categories",
@@ -71,15 +56,15 @@ function App() {
                     edit: "/categories/edit/:id",
                     show: "/categories/show/:id",
                     meta: {
-                      canDelete: true,
-                    },
-                  },
+                      canDelete: true
+                    }
+                  }
                 ]}
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
                   useNewQueryKeys: true,
-                  projectId: "A37MVW-Q1ibzK-i30OFW",
+                  projectId: "A37MVW-Q1ibzK-i30OFW"
                 }}
               >
                 <Routes>
@@ -95,10 +80,7 @@ function App() {
                       </Authenticated>
                     }
                   >
-                    <Route
-                      index
-                      element={<NavigateToResource resource="blog_posts" />}
-                    />
+                    <Route index element={<NavigateToResource resource="blog_posts" />} />
                     <Route path="/blog-posts">
                       <Route index element={<BlogPostList />} />
                       <Route path="create" element={<BlogPostCreate />} />
@@ -115,20 +97,14 @@ function App() {
                   </Route>
                   <Route
                     element={
-                      <Authenticated
-                        key="authenticated-outer"
-                        fallback={<Outlet />}
-                      >
+                      <Authenticated key="authenticated-outer" fallback={<Outlet />}>
                         <NavigateToResource />
                       </Authenticated>
                     }
                   >
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
-                    <Route
-                      path="/forgot-password"
-                      element={<ForgotPassword />}
-                    />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
                   </Route>
                 </Routes>
 
@@ -142,7 +118,7 @@ function App() {
         </ColorModeContextProvider>
       </RefineKbarProvider>
     </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App
