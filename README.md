@@ -38,3 +38,8 @@ RUNNING TESTS LOCALLY:
 2. docker-compose -f docker-compose.dev.yml exec backend bash
 3. rails db:test:prepare
 4. bundle exec rspec
+
+RUNNING RUBOCOP LINTER LOCALLY:
+1. Go into parlo folder
+2. docker-compose -f docker-compose.dev.yml exec backend bash
+3. bundle exec rubocop
