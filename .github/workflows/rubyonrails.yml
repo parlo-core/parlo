@@ -1,0 +1,50 @@
+name: "Ruby on Rails CI"
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "backend/**"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_DB: parlo
+          POSTGRES_USER: parlo
+          POSTGRES_PASSWORD: parlo
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: "postgres://parlo:parlo@localhost:5432/parlo"
+      SECRET_KEY_BASE: 0919fbe2-9440-4d17-9762-c8a418cd9b32
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3.1'
+          bundler-cache: true
+      - name: Set up database schema
+        run: bin/rails db:schema:load
+      - name: Run tests
+        run: bundle exec rspec
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Setup rubocop
+        run: bundle install
+      - name: Lint Ruby files
+        run: bundle exec rubocop
