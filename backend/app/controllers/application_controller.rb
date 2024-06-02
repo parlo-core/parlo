@@ -5,14 +5,14 @@ class ApplicationController < ActionController::API
     ActiveRecord::Base.connection.execute('')
     render(
       json: {
-        message: 'Healthy'
+        message: 'Operational'
       },
       status: :ok
     )
   rescue ActiveRecord::ActiveRecordError => e
     render(
       json: {
-        message: 'Sick',
+        message: 'Incident',
         details: e.message
       },
       status: :internal_server_error
