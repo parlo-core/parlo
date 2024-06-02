@@ -19,7 +19,7 @@ jobs:
     env:
       RAILS_ENV: test
       DATABASE_URL: "postgres://parlo:parlo@localhost:5432/parlo"
-      SECRET_KEY_BASE: 0919fbe2-9440-4d17-9762-c8a418cd9b32
+      SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
