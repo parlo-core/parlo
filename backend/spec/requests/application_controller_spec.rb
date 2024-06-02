@@ -9,7 +9,7 @@ RSpec.describe ApplicationController, type: :request do
 
       aggregate_failures do
         expect(response.status).to be(200)
-        expect(json[:message]).to eq('Healthy')
+        expect(json[:message]).to eq('Operational')
       end
     end
   end
