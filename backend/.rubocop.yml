@@ -34,3 +34,6 @@ Metrics/ModuleLength:
 
 Metrics/PerceivedComplexity:
   Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
