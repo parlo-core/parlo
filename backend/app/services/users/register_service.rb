@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 module Users
-  class CreateService < BaseService
+  class RegisterService < BaseService
     def initialize(params:)
       @params = params
 
       super
     end
 
-    def call
+    def create_user_and_company
       return result.validation_error!(messages: [field: :email, code: 'already_exists']) if User.exists?(params[:email])
 
       ActiveRecord::Base.transaction do
