@@ -8,6 +8,6 @@ class CreateCompanies < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_reference :users, :company, type: :uuid, null: false, foreign_key: true, index: true
+    add_reference :users, :company, type: :uuid, null: false, foreign_key: true, index: true # rubocop:disable Rails/NotNullColumn
   end
 end
