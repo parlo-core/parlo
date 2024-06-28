@@ -9,7 +9,9 @@ module Users
     end
 
     def create_user_and_company
-      return result.validation_error!(messages: [field: :email, code: 'already_exists']) if User.exists?(email: params[:email])
+      if User.exists?(email: params[:email])
+        return result.validation_error!(messages: [field: :email, code: 'already_exists'])
+      end
 
       ActiveRecord::Base.transaction do
         company = Company.create!(name: params[:company_name])
