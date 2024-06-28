@@ -35,5 +35,12 @@ Metrics/ModuleLength:
 Metrics/PerceivedComplexity:
   Enabled: false
 
+Rails/HasManyOrHasOneDependent:
+  Description: 'Forces a "dependent" options for has_one and has_many rails relations.'
+  Enabled: false
+
 RSpec/NamedSubject:
+  Enabled: false
+
+RSpec/ExampleLength:
   Enabled: false
