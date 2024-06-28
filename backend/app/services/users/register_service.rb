@@ -5,15 +5,21 @@ module Users
     def initialize(params:)
       @params = params
 
-      super
+      super()
     end
 
     def create_user_and_company
-      return result.validation_error!(messages: [field: :email, code: 'already_exists']) if User.exists?(params[:email])
+      return result.validation_error!(messages: [field: :email, code: 'already_exists']) if User.exists?(email: params[:email])
 
       ActiveRecord::Base.transaction do
-        company = Company.create!(name: params[:name])
-        user = User.create!(email: params[:email], password: params[:password], company:)
+        company = Company.create!(name: params[:company_name])
+        user = User.create!(
+          email: params[:email],
+          password: params[:password],
+          company:,
+          first_name: params[:first_name],
+          last_name: params[:last_name]
+        )
 
         result.user = user
         result.company = company

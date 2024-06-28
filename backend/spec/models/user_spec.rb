@@ -3,7 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  subject { described_class.new(email: 'test@example.com', password: 'Example1!') }
+  subject { described_class.new(email: 'test@example.com', password: 'Example1!', company:) }
+
+  let(:company) { create(:company) }
 
   describe 'Validations' do
     it 'passes validations if all required attributes are given' do
