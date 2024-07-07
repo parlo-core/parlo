@@ -13,11 +13,11 @@ module ApiErrors
     )
   end
 
-  def bad_request_error(error)
+  def bad_request_error(error: nil)
     render(
       json: {
         status: 400,
-        error: "BadRequest: #{error.message}"
+        error: "BadRequest: #{error&.message}"
       },
       status: :bad_request
     )

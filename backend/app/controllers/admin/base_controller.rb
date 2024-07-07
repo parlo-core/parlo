@@ -13,7 +13,7 @@ module Admin
 
       @active_user = result.active_user
 
-      return unauthorized_error if active_user.nil?
+      return unauthorized_error if active_user.blank?
 
       renew_token
 
