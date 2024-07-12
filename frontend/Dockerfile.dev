@@ -1,0 +1,9 @@
+FROM refinedev/node:18
+
+WORKDIR /app
+
+RUN apk add --no-cache bash
+
+ENV PATH /app/node_modules/.bin:$PATH
+
+CMD ["sh", "-c", "yarn install && yarn dev"]
