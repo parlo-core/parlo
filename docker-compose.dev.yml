@@ -88,6 +88,7 @@ services:
       - $PARLO_PATH/backend:/app:delegated
     environment:
       - PARLO_API_URL=https://api.parlo.dev
+      - PARLO_FRONT_URL=${FRONT_URL:-https://app.parlo.dev}
       - DATABASE_URL=postgresql://${POSTGRES_USER:-parlo}:${POSTGRES_PASSWORD:-placeholder}@db:5432/${POSTGRES_DB:-parlo}
       - DATABASE_TEST_URL=postgresql://${POSTGRES_USER:-parlo}:${POSTGRES_PASSWORD:-placeholder}@db:5432/${POSTGRES_DB:-parlo_test}
       - REDIS_URL=redis://redis:6379
