@@ -1,4 +1,4 @@
-import { Authenticated, GitHubBanner, Refine } from "@refinedev/core"
+import { Authenticated, Refine } from "@refinedev/core"
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools"
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar"
 
@@ -26,7 +26,6 @@ import { Register } from "./pages/register"
 function App() {
   return (
     <BrowserRouter>
-      <GitHubBanner />
       <RefineKbarProvider>
         <ColorModeContextProvider>
           <CssBaseline />
@@ -61,6 +60,10 @@ function App() {
                   }
                 ]}
                 options={{
+                  title: {
+                    // TODO: Customize text style and add custom icon
+                    text: "Parlo"
+                  },
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
                   useNewQueryKeys: true,
