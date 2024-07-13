@@ -7,12 +7,24 @@
 
 # Read more: https://github.com/cyu/rack-cors
 
-# Rails.application.config.middleware.insert_before 0, Rack::Cors do
-#   allow do
-#     origins "example.com"
-#
-#     resource "*",
-#       headers: :any,
-#       methods: [:get, :post, :put, :patch, :delete, :options, :head]
-#   end
-# end
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    if ENV.key?('PARLO_FRONT_URL')
+      uri = URI(ENV['PARLO_FRONT_URL'])
+
+      frontend_origin = if uri.port.in?([80, 443])
+                          uri.host
+                        else
+                          [uri.host, uri.port].join(':')
+                        end
+
+      origins frontend_origin
+    elsif Rails.env.development?
+      origins 'app.parlo.dev'
+    end
+
+    resource '*',
+             headers: :any,
+             methods: %i[get post put patch delete options head]
+  end
+end
