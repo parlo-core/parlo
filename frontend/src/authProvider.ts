@@ -3,9 +3,34 @@ import { AuthBindings } from "@refinedev/core";
 export const TOKEN_KEY = "refine-auth";
 
 export const authProvider: AuthBindings = {
-  login: async ({ username, email, password }) => {
-    if ((username || email) && password) {
-      localStorage.setItem(TOKEN_KEY, username);
+  register: async ({ firstName, lastName, email, password, companyName }) => {
+    // For now, we didn't send a request, and we save the token in localStorage.
+    // In real world, we will send a request and the token will be saved in a more secure place.
+    localStorage.setItem("token", email);
+    alert("You have successfully completed sign up!");
+    return {
+      success: true,
+    };
+  },
+  login: async ({ email, password }) => {
+    // TODO: handle login
+    // const {status} = handleLogin(email, password);
+    //
+    // if (status === 200) {
+    //   return { success: true, redirectTo: "/dashboard" };
+    // } else {
+    //   return {
+    //     success: false,
+    //     error: {
+    //       name: "LoginError",
+    //       message: "Invalid username or password",
+    //     },
+    //   };
+    // }
+
+    // TODO: remove this block
+    if (email && password) {
+      localStorage.setItem(TOKEN_KEY, email);
       return {
         success: true,
         redirectTo: "/",
