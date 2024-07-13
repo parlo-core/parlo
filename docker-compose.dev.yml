@@ -1,6 +1,8 @@
 version: "3.8"
 
 volumes:
+  front_node_modules:
+  front_dist:
   postgres_data:
   redis_data:
 
@@ -46,6 +48,31 @@ services:
       - redis_data:/data
     ports:
       - 6379:6379
+
+  frontend:
+    image: frontend
+    container_name: parlo_frontend
+    stdin_open: true
+    restart: unless-stopped
+    depends_on:
+      - backend
+    build:
+      context: ./frontend
+      dockerfile: $PARLO_PATH/frontend/Dockerfile.dev
+    volumes:
+      - $PARLO_PATH/frontend:/app:delegated
+      - front_node_modules:/app/node_modules:delegated
+      - front_dist:/app/dist:delegated
+    environment:
+      - NODE_ENV=development
+      - API_URL=https://api.parlo.dev
+      - APP_DOMAIN=https://app.parlo.dev
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`app.parlo.dev`)"
+      - "traefik.http.routers.app.entrypoints=web,websecure"
+      - "traefik.http.routers.app.tls=true"
+      - "traefik.http.services.app.loadbalancer.server.port=8080"
 
   backend:
     image: backend
