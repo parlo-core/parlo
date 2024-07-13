@@ -54,6 +54,8 @@ services:
     container_name: parlo_frontend
     stdin_open: true
     restart: unless-stopped
+    depends_on:
+      - backend
     build:
       context: ./frontend
       dockerfile: $PARLO_PATH/frontend/Dockerfile.dev
