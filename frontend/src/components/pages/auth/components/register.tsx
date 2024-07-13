@@ -1,6 +1,16 @@
 import { useForm } from "@refinedev/react-hook-form";
 import * as React from "react";
-import { type RegisterPageProps, useActiveAuthProvider, type BaseRecord, type HttpError, useTranslate, useRouterContext, useRouterType, useLink, useRegister } from "@refinedev/core";
+import {
+  type RegisterPageProps,
+  useActiveAuthProvider,
+  type BaseRecord,
+  type HttpError,
+  useTranslate,
+  useRouterContext,
+  useRouterType,
+  useLink,
+  useRegister
+} from "@refinedev/core";
 import { ThemedTitleV2 } from "@refinedev/mui";
 import { layoutStyles, titleStyles } from "./styles";
 import Box from "@mui/material/Box";
@@ -73,6 +83,7 @@ export const RegisterPage: React.FC<RegisterProps> = ({
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<BaseRecord, HttpError, RegisterFormTypes>({
     ...useFormProps,
@@ -155,6 +166,8 @@ export const RegisterPage: React.FC<RegisterProps> = ({
     return null;
   };
 
+  const password = watch("password");
+
   const Content = (
     <Card {...(contentProps ?? {})}>
       <CardContent sx={{ p: "32px", "&:last-child": { pb: "32px" } }}>
@@ -177,9 +190,62 @@ export const RegisterPage: React.FC<RegisterProps> = ({
                 return onSubmit(data);
               }
 
-              return registerMutate(data);
+              const { repeatPassword, ...submitData } = data;
+
+              return registerMutate(submitData);
             })}
           >
+            <TextField
+              {...register("firstName", {
+                required: translate(
+                  "pages.register.errors.requiredFirstName",
+                  "First Name is required",
+                ),
+              })}
+              id="firstName"
+              margin="normal"
+              fullWidth
+              label={translate("pages.register.firstName", "First Name")}
+              error={!!errors.firstName}
+              helperText={errors["firstName"] ? errors["firstName"].message : ""}
+              name="firstName"
+              autoComplete="firstName"
+              sx={{ mt: 0 }}
+            />
+            <TextField
+              {...register("lastName", {
+                required: translate(
+                  "pages.register.errors.requiredLastName",
+                  "Last Name is required",
+                ),
+              })}
+              id="lastName"
+              margin="normal"
+              fullWidth
+              label={translate("pages.register.lastName", "Last Name")}
+              error={!!errors.lastName}
+              helperText={errors["lastName"] ? errors["lastName"].message : ""}
+              name="lastName"
+              autoComplete="lastName"
+              sx={{ mt: 0 }}
+            />
+            <TextField
+              {...register("companyName", {
+                required: translate(
+                  "pages.register.errors.requiredCompanyName",
+                  "Company Name is required",
+                ),
+              })}
+              id="companyName"
+              margin="normal"
+              fullWidth
+              label={translate("pages.register.companyName", "Company Name")}
+              error={!!errors.companyName}
+              helperText={errors["companyName"] ? errors["companyName"].message : ""}
+              name="companyName"
+              autoComplete="companyName"
+              sx={{ mt: 0 }}
+            />
             <TextField
               {...register("email", {
                 required: translate(
@@ -223,18 +289,35 @@ export const RegisterPage: React.FC<RegisterProps> = ({
               type="password"
               placeholder="●●●●●●●●"
               autoComplete="current-password"
-              sx={{
-                mb: 0,
-              }}
+              sx={{ mb: 0 }}
+            />
+            <TextField
+              {...register("repeatPassword", {
+                required: translate(
+                  "pages.register.errors.requiredRepeatPassword",
+                  "Repeat Password is required",
+                ),
+                validate: (value) =>
+                  value === password || "Passwords do not match",
+              })}
+              id="repeatPassword"
+              margin="normal"
+              fullWidth
+              name="repeatPassword"
+              label={translate("pages.register.fields.repeatPassword", "Repeat Password")}
+              helperText={errors["repeatPassword"] ? errors["repeatPassword"].message : ""}
+              error={!!errors.repeatPassword}
+              type="password"
+              placeholder="●●●●●●●●"
+              autoComplete="current-password"
+              sx={{ mb: 0 }}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               disabled={isLoading}
-              sx={{
-                mt: "24px",
-              }}
+              sx={{ mt: "24px" }}
             >
               {translate("pages.register.signup", "Sign up")}
             </Button>
