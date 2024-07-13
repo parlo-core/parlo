@@ -1,5 +1,4 @@
 import { Authenticated, Refine } from "@refinedev/core"
-import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools"
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar"
 
 import { ErrorComponent, notificationProvider, RefineSnackbarProvider, ThemedLayoutV2 } from "@refinedev/mui"
@@ -31,7 +30,6 @@ function App() {
           <CssBaseline />
           <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
           <RefineSnackbarProvider>
-            <DevtoolsProvider>
               <Refine
                 dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
                 notificationProvider={notificationProvider}
@@ -115,8 +113,6 @@ function App() {
                 <UnsavedChangesNotifier />
                 <DocumentTitleHandler />
               </Refine>
-              <DevtoolsPanel />
-            </DevtoolsProvider>
           </RefineSnackbarProvider>
         </ColorModeContextProvider>
       </RefineKbarProvider>
