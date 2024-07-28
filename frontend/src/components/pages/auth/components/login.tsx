@@ -20,31 +20,6 @@ import type { BoxProps } from "@mui/material/Box";
 import type { CardContentProps } from "@mui/material/CardContent";
 import type { FormPropsType } from "../index";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 type LoginProps = LoginPageProps<BoxProps, CardContentProps, FormPropsType>;
 
 /**
@@ -308,7 +283,16 @@ export const LoginPage: React.FC<LoginProps> = ({
 
   return (
     <FormProvider {...methods}>
-      <Box component="div" style={layoutStyles} {...(wrapperProps ?? {})}>
+      <Box
+        component="div"
+        style={layoutStyles}
+        {...(wrapperProps ?? {})}
+        sx={{
+          backgroundImage: "linear-gradient(to bottom right, #7BD5F5, #787FF6)",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+        }}
+      >
         <Container
           component="main"
           sx={{

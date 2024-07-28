@@ -6,13 +6,6 @@ import type { AuthPageProps, RegisterFormTypes } from "@refinedev/core";
 import type { UseFormProps } from "@refinedev/react-hook-form";
 
 
-
-
-
-
-
-
-
 export interface FormPropsType extends UseFormProps {
   onSubmit?: (values: RegisterFormTypes) => void;
 }
