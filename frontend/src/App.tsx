@@ -1,5 +1,4 @@
-import { Authenticated, GitHubBanner, Refine } from "@refinedev/core"
-import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools"
+import { Authenticated, Refine } from "@refinedev/core"
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar"
 
 import { ErrorComponent, notificationProvider, RefineSnackbarProvider, ThemedLayoutV2 } from "@refinedev/mui"
@@ -26,13 +25,11 @@ import { Register } from "./pages/register"
 function App() {
   return (
     <BrowserRouter>
-      <GitHubBanner />
       <RefineKbarProvider>
         <ColorModeContextProvider>
           <CssBaseline />
           <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
           <RefineSnackbarProvider>
-            <DevtoolsProvider>
               <Refine
                 dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
                 notificationProvider={notificationProvider}
@@ -61,6 +58,10 @@ function App() {
                   }
                 ]}
                 options={{
+                  title: {
+                    // TODO: Customize text style and add custom icon
+                    text: "Parlo"
+                  },
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
                   useNewQueryKeys: true,
@@ -112,8 +113,6 @@ function App() {
                 <UnsavedChangesNotifier />
                 <DocumentTitleHandler />
               </Refine>
-              <DevtoolsPanel />
-            </DevtoolsProvider>
           </RefineSnackbarProvider>
         </ColorModeContextProvider>
       </RefineKbarProvider>
