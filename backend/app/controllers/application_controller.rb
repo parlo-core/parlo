@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::API
   include ApiErrors
+  include Pagination
 
   wrap_parameters false
 
