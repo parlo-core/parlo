@@ -12,6 +12,7 @@ import routerBindings, {
   UnsavedChangesNotifier
 } from "@refinedev/react-router-v6"
 import dataProvider from "@refinedev/simple-rest"
+import Dashboard from "@mui/icons-material/Dashboard";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom"
 import { authProvider } from "./authProvider"
 import { Header } from "./components"
@@ -21,6 +22,7 @@ import { CategoryCreate, CategoryEdit, CategoryList, CategoryShow } from "./page
 import { ForgotPassword } from "./pages/forgotPassword"
 import { Login } from "./pages/login"
 import { Register } from "./pages/register"
+import { DashboardPage } from "./pages/dashboard"
 
 function App() {
   return (
@@ -36,6 +38,14 @@ function App() {
                 routerProvider={routerBindings}
                 authProvider={authProvider}
                 resources={[
+                  {
+                    name: "dashboard",
+                    list: "/",
+                    meta: {
+                      label: "Dashboard",
+                      icon: <Dashboard />,
+                    }
+                  },
                   {
                     name: "blog_posts",
                     list: "/blog-posts",
@@ -81,7 +91,8 @@ function App() {
                       </Authenticated>
                     }
                   >
-                    <Route index element={<NavigateToResource resource="blog_posts" />} />
+                    <Route index element={<DashboardPage />} />
+
                     <Route path="/blog-posts">
                       <Route index element={<BlogPostList />} />
                       <Route path="create" element={<BlogPostCreate />} />
