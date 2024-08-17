@@ -3,7 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe List, type: :model do
-  subject { described_class.new(name: 'Test List') }
+  subject { described_class.new(name: 'Test List', company:) }
+
+  let(:company) { create(:company) }
 
   describe 'Validations' do
     it 'passes validations if all required attributes are given' do
