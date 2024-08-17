@@ -32,6 +32,23 @@ RSpec.describe ::BaseService, type: :service do
     end
   end
 
+  context 'when there is record validation error' do
+    let(:errors) { OpenStruct.new(messages: { email: ['is_invalid'] }) }
+    let(:record) { OpenStruct.new(errors:) }
+
+    it 'returns not succeeded result' do
+      failed_result = result.record_validation_error!(record:)
+
+      expect(failed_result.succeeded?).to eq(false)
+    end
+
+    it 'raises ParloValidationError' do
+      expect do
+        result.validation_error!(messages: [{ 'field' => 'unknown' }]).fetch_or_raise!
+      end.to raise_error(ParloValidationError)
+    end
+  end
+
   context 'when there is not found error' do
     it 'returns not succeeded result' do
       failed_result = result.not_found_error!(resource: 'test')

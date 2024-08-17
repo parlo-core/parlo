@@ -2,6 +2,7 @@
 
 class Company < ApplicationRecord
   has_many :users
+  has_many :lists
 
   validates :name, presence: true
 end
