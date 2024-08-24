@@ -6,7 +6,7 @@ module Admin
 
     private
 
-    attr_reader :active_user
+    attr_reader :active_user, :current_company
 
     def authenticate
       result = Auth::TokenService.new.active_user(request.headers['Authorization']&.to_s&.split(' ')&.last)
@@ -14,6 +14,8 @@ module Admin
       @active_user = result.active_user
 
       return unauthorized_error if active_user.blank?
+
+      @current_company = active_user.company
 
       renew_token
 
