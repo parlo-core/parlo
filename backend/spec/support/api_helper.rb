@@ -13,6 +13,18 @@ module ApiHelper
     post(path, params: params.to_json, headers: processes_headers)
   end
 
+  def put_with_token(token, path, params = {}, headers = {})
+    processes_headers = configure_headers(token, headers)
+
+    put(path, params: params.to_json, headers: processes_headers)
+  end
+
+  def delete_with_token(token, path, params = {}, headers = {})
+    processes_headers = configure_headers(token, headers)
+
+    delete(path, params: params.to_json, headers: processes_headers)
+  end
+
   def json
     return response.body unless response.media_type.include?('json')
 

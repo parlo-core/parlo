@@ -26,7 +26,7 @@ module Users
         result.user = user
         result.company = company
       rescue ActiveRecord::RecordInvalid => e
-        result.validation_error!(messages: e&.record&.errors&.messages&.to_a)
+        result.record_validation_error!(record: e.record)
       end
 
       result

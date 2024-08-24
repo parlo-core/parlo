@@ -24,6 +24,16 @@ class BaseService
       self
     end
 
+    def record_validation_error!(record:)
+      errors = record&.errors&.messages
+      messages = errors&.keys&.map { |k| { field: k.to_sym, code: errors[k].first } }
+
+      @succeeded = false
+      @error = ::ParloValidationError.new(messages:)
+
+      self
+    end
+
     def not_found_error!(resource:)
       @succeeded = false
       @error = ::ParloNotFoundError.new(resource:)
