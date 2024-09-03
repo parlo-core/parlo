@@ -31,6 +31,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_01_145216) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["company_id"], name: "index_contacts_on_company_id"
+    t.index ["email"], name: "index_contacts_on_email", unique: true
     t.index ["list_id"], name: "index_contacts_on_list_id"
   end
 
