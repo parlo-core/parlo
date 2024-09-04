@@ -2,34 +2,39 @@
 
 require 'rails_helper'
 
-RSpec.describe Lists::UpdateService, type: :service do
-  subject(:update_service) { described_class.new(list:, params:) }
+RSpec.describe Contacts::UpdateService, type: :service do
+  subject(:update_service) { described_class.new(contact:, params:) }
 
   let(:company) { create(:company) }
   let(:list) { create(:list, company:) }
+  let(:contact) { create(:contact, company:, list:) }
   let(:params) do
     {
-      name: 'list-worldwide'
+      name: 'contact-worldwide',
+      email: 'email1298@example.com',
+      status: 'unsubscribed'
     }
   end
 
-  before { list }
+  before { contact }
 
   context 'when params are passed correctly' do
-    it 'updates list' do
+    it 'updates contact' do
       result = update_service.call
 
       aggregate_failures do
         expect(result).to be_succeeded
-        expect(result.list.name).to eq('list-worldwide')
+        expect(result.contact.name).to eq('contact-worldwide')
+        expect(result.contact.email).to eq('email1298@example.com')
+        expect(result.contact.status).to eq('unsubscribed')
       end
     end
   end
 
-  context 'when list name already exists in the company scope' do
-    let(:list2) { create(:list, name: 'list-worldwide', company:) }
+  context 'when email already exists' do
+    let(:contact2) { create(:contact, email: 'email1298@example.com') }
 
-    before { list2 }
+    before { contact2 }
 
     it 'returns validation error' do
       result = update_service.call
@@ -37,16 +42,18 @@ RSpec.describe Lists::UpdateService, type: :service do
       aggregate_failures do
         expect(result).not_to be_succeeded
         expect(result.error).to be_a(ParloValidationError)
-        expect(result.error.messages.first[:field].to_s).to eq('name')
+        expect(result.error.messages.first[:field].to_s).to eq('email')
         expect(result.error.messages.first[:code]).to eq('value_already_exist')
       end
     end
   end
 
-  context 'when list name is nil' do
+  context 'when contact name is nil' do
     let(:params) do
       {
-        name: nil
+        name: nil,
+        email: 'email1298@example.com',
+        status: 'unsubscribed'
       }
     end
 
@@ -62,8 +69,8 @@ RSpec.describe Lists::UpdateService, type: :service do
     end
   end
 
-  context 'when list cannot be found' do
-    let(:list) { nil }
+  context 'when contact cannot be found' do
+    let(:contact) { nil }
 
     it 'returns validation error' do
       result = update_service.call
@@ -71,8 +78,8 @@ RSpec.describe Lists::UpdateService, type: :service do
       aggregate_failures do
         expect(result).not_to be_succeeded
         expect(result.error).to be_a(ParloNotFoundError)
-        expect(result.error.resource).to eq('list')
-        expect(result.error.message).to eq('list_not_found')
+        expect(result.error.resource).to eq('contact')
+        expect(result.error.message).to eq('contact_not_found')
       end
     end
   end

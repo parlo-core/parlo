@@ -11,7 +11,7 @@ RSpec.describe Lists::DestroyService, type: :service do
   before { list }
 
   context 'when params are passed correctly' do
-    it 'creates list' do
+    it 'removes list' do
       expect { destroy_service.call }.to change(List, :count).by(-1)
     end
   end
