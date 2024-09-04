@@ -9,13 +9,14 @@ module Contacts
     end
 
     def call
-      contact = Contact.create!(
+      contact = Contact.new(
         name: params[:name],
         email: params[:email],
         status: params[:status] == 'unsubscribed' ? 'unsubscribed' : 'subscribed',
-        company_id: params[:company_id],
-        list_id: params[:list_id]
+        company_id: params[:company_id]
       )
+      contact.list_id = params[:list_id] if params[:list_id]
+      contact.save!
 
       result.contact = contact
       result
