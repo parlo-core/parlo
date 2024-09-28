@@ -21,12 +21,13 @@
 ```
 127.0.0.1 traefik.parlo.dev
 127.0.0.1 api.parlo.dev
+127.0.0.1 app.parlo.dev
 ```
 12. Start application in parlo root folder:
 ```
 cd $PARLO_PATH
 docker-compose -f docker-compose.dev.yml up -d db redis traefik
-docker-compose -f docker-compose.dev.yml up backend
+docker-compose -f docker-compose.dev.yml up backend frontend
 
 # If you want to go inside backend container:
 docker-compose -f docker-compose.dev.yml exec backend bash
