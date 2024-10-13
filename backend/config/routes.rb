@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :lists, only: %i[create update index destroy]
     resources :contacts, only: %i[create update index destroy]
+    resources :templates, only: %i[create update index destroy]
     resources :users, only: :create
     post '/login', to: 'auth#create'
   end
