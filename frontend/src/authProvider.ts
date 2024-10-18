@@ -119,6 +119,14 @@ export const authProvider: AuthBindings = {
   },
   onError: async (error) => {
     console.error(error)
+
+    if (error?.status === 401) {
+      return {
+        logout: true,
+        error: { ...error, message: "Unauthorized" }
+      }
+    }
+
     return { error }
   }
 }
