@@ -19,7 +19,7 @@ RSpec.describe Lists::DestroyService, type: :service do
   context 'when list cannot be found' do
     let(:list) { nil }
 
-    it 'returns validation error' do
+    it 'returns not found error' do
       result = destroy_service.call
 
       aggregate_failures do

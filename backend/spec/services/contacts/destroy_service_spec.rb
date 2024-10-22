@@ -20,7 +20,7 @@ RSpec.describe Contacts::DestroyService, type: :service do
   context 'when contact cannot be found' do
     let(:contact) { nil }
 
-    it 'returns validation error' do
+    it 'returns not found error' do
       result = destroy_service.call
 
       aggregate_failures do

@@ -2,39 +2,36 @@
 
 require 'rails_helper'
 
-RSpec.describe Contacts::UpdateService, type: :service do
-  subject(:update_service) { described_class.new(contact:, params:) }
+RSpec.describe Templates::UpdateService, type: :service do
+  subject(:update_service) { described_class.new(template:, params:) }
 
   let(:company) { create(:company) }
-  let(:list) { create(:list, company:) }
-  let(:contact) { create(:contact, company:, list:) }
+  let(:template) { create(:template, company:) }
   let(:params) do
     {
-      name: 'contact-worldwide',
-      email: 'email1298@example.com',
-      status: 'unsubscribed'
+      name: 'template-worldwide',
+      content: '<p>TT</p>'
     }
   end
 
-  before { contact }
+  before { template }
 
   context 'when params are passed correctly' do
-    it 'updates contact' do
+    it 'updates template' do
       result = update_service.call
 
       aggregate_failures do
         expect(result).to be_succeeded
-        expect(result.contact.name).to eq('contact-worldwide')
-        expect(result.contact.email).to eq('email1298@example.com')
-        expect(result.contact.status).to eq('unsubscribed')
+        expect(result.template.name).to eq('template-worldwide')
+        expect(result.template.content).to eq('<p>TT</p>')
       end
     end
   end
 
-  context 'when email already exists' do
-    let(:contact2) { create(:contact, email: 'email1298@example.com') }
+  context 'when template name already exists in the company scope' do
+    let(:template2) { create(:template, name: 'template-worldwide', company:) }
 
-    before { contact2 }
+    before { template2 }
 
     it 'returns validation error' do
       result = update_service.call
@@ -42,18 +39,16 @@ RSpec.describe Contacts::UpdateService, type: :service do
       aggregate_failures do
         expect(result).not_to be_succeeded
         expect(result.error).to be_a(ParloValidationError)
-        expect(result.error.messages.first[:field].to_s).to eq('email')
+        expect(result.error.messages.first[:field].to_s).to eq('name')
         expect(result.error.messages.first[:code]).to eq('value_already_exist')
       end
     end
   end
 
-  context 'when contact name is nil' do
+  context 'when template name is nil' do
     let(:params) do
       {
-        name: nil,
-        email: 'email1298@example.com',
-        status: 'unsubscribed'
+        name: nil
       }
     end
 
@@ -69,8 +64,8 @@ RSpec.describe Contacts::UpdateService, type: :service do
     end
   end
 
-  context 'when contact cannot be found' do
-    let(:contact) { nil }
+  context 'when template cannot be found' do
+    let(:template) { nil }
 
     it 'returns not found error' do
       result = update_service.call
@@ -78,8 +73,8 @@ RSpec.describe Contacts::UpdateService, type: :service do
       aggregate_failures do
         expect(result).not_to be_succeeded
         expect(result.error).to be_a(ParloNotFoundError)
-        expect(result.error.resource).to eq('contact')
-        expect(result.error.message).to eq('contact_not_found')
+        expect(result.error.resource).to eq('template')
+        expect(result.error.message).to eq('template_not_found')
       end
     end
   end
