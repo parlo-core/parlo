@@ -52,6 +52,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_13_181133) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["company_id"], name: "index_templates_on_company_id"
+    t.index ["name", "company_id"], name: "index_templates_on_name_and_company_id", unique: true
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

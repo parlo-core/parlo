@@ -10,5 +10,7 @@ class CreateTemplates < ActiveRecord::Migration[7.1]
 
       t.timestamps
     end
+
+    add_index :templates, %i[name company_id], unique: true
   end
 end
