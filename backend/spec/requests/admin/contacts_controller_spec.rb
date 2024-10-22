@@ -57,7 +57,7 @@ RSpec.describe Admin::ContactsController, type: :request do
       }
     end
 
-    it 'updates an add-on' do
+    it 'updates a contact' do
       put_with_token(token, "/admin/contacts/#{contact.id}", { contact: update_params })
 
       aggregate_failures do

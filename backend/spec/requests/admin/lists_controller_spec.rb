@@ -45,7 +45,7 @@ RSpec.describe Admin::ListsController, type: :request do
       }
     end
 
-    it 'updates an add-on' do
+    it 'updates a list' do
       put_with_token(token, "/admin/lists/#{list.id}", { list: update_params })
 
       aggregate_failures do
