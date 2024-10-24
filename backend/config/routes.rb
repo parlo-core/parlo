@@ -4,9 +4,9 @@ Rails.application.routes.draw do
   get 'health_status', to: 'application#health_status'
 
   namespace :admin do
-    resources :lists, only: %i[create update index destroy]
-    resources :contacts, only: %i[create update index destroy]
-    resources :templates, only: %i[create update index destroy]
+    resources :lists, only: %i[create update index destroy show]
+    resources :contacts, only: %i[create update index destroy show]
+    resources :templates, only: %i[create update index destroy show]
     resources :users, only: :create
     post '/login', to: 'auth#create'
   end
