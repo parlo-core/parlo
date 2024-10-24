@@ -14,6 +14,14 @@ module Admin
       end
     end
 
+    def show
+      list = current_company.lists.find_by(id: params[:id])
+
+      return not_found_error(resource: 'list') unless list
+
+      render_list(list)
+    end
+
     def update
       list = current_company.lists.find_by(id: params[:id])
       result = Lists::UpdateService.new(list:, params: input_params.to_h.deep_symbolize_keys).call

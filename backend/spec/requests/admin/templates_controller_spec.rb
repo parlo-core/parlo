@@ -107,6 +107,29 @@ RSpec.describe Admin::TemplatesController, type: :request do
     end
   end
 
+  describe 'show' do
+    let(:template) { create(:template, company:) }
+
+    before { template }
+
+    it 'returns template' do
+      get_with_token(token, "/admin/templates/#{template.id}")
+
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+        expect(json[:template][:name]).to eq(template.name)
+      end
+    end
+
+    context 'when template does not exist' do
+      it 'returns not_found error' do
+        get_with_token(token, '/admin/templates/invalid')
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
+
   describe 'index' do
     let(:template) { create(:template, company:) }
 

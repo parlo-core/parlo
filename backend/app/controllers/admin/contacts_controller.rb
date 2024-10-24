@@ -14,6 +14,14 @@ module Admin
       end
     end
 
+    def show
+      contact = current_company.contacts.find_by(id: params[:id])
+
+      return not_found_error(resource: 'contact') unless contact
+
+      render_contact(contact)
+    end
+
     def update
       contact = current_company.contacts.find_by(id: params[:id])
       result = Contacts::UpdateService.new(contact:, params: input_params.to_h.deep_symbolize_keys).call

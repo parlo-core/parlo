@@ -14,6 +14,14 @@ module Admin
       end
     end
 
+    def show
+      template = current_company.templates.find_by(id: params[:id])
+
+      return not_found_error(resource: 'template') unless template
+
+      render_template(template)
+    end
+
     def update
       template = current_company.templates.find_by(id: params[:id])
       result = Templates::UpdateService.new(template:, params: input_params.to_h.deep_symbolize_keys).call
