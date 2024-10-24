@@ -1,12 +1,12 @@
 import { AuthBindings } from "@refinedev/core"
 
 export const TOKEN_KEY = "refine-auth"
-const apiUrl = import.meta.env.VITE_API_BASE_URL
+const apiUrl = import.meta.env.VITE_API_BASE_URL + "/admin"
 
 export const authProvider: AuthBindings = {
   register: async ({ firstName, lastName, email, password, companyName }) => {
     try {
-      const response = await fetch(`${apiUrl}admin/users`, {
+      const response = await fetch(`${apiUrl}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -53,7 +53,7 @@ export const authProvider: AuthBindings = {
     }
   },
   login: async ({ email, password }) => {
-    const response = await fetch(`${apiUrl}admin/login`, {
+    const response = await fetch(`${apiUrl}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

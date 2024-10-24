@@ -17,8 +17,10 @@ const fetcher = async (url: string, options?: RequestInit) => {
 }
 
 export const dataProvider: DataProvider = {
-  getOne: async ({ resource, id, meta }) => {
-    const response = await fetch(`${apiUrl}/${resource}/${id}`)
+  getOne: async ({ resource, id }) => {
+    const response = await fetcher(`${apiUrl}/${resource}/${id}`, {
+      method: "GET"
+    })
 
     if (response.status < 200 || response.status > 299) throw response
 
@@ -40,14 +42,18 @@ export const dataProvider: DataProvider = {
 
     return { data }
   },
-  // TODO: implement pagination, sorting, and filtering
+  // TODO: implement sorting and filtering
   getList: async ({ resource, pagination, filters, sorters, meta }) => {
     const params = new URLSearchParams()
 
-    // if (pagination) {
-    //   params.append("_start", (pagination.current - 1) * pagination.pageSize);
-    //   params.append("_end", pagination.current * pagination.pageSize);
-    // }
+    if (pagination) {
+      console.log("pagination", pagination)
+
+      if (pagination.pageSize && pagination.current) {
+        params.append("page", pagination.current.toString())
+        params.append("per_page", pagination.pageSize.toString())
+      }
+    }
 
     // if (sorters && sorters.length > 0) {
     //   params.append("_sort", sorters.map((sorter) => sorter.field).join(","));
@@ -68,16 +74,33 @@ export const dataProvider: DataProvider = {
     if (response.status < 200 || response.status > 299) throw response
 
     const data = await response.json()
+    const { current_page, total_count } = data.meta
 
     return {
       data: data[resource],
-      total: 0
+      total: total_count,
+      current: current_page
     }
   },
-  update: () => {
-    throw new Error("Not implemented")
+  update: async ({ resource, id, variables }) => {
+    const response = await fetcher(`${apiUrl}/${resource}/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(variables)
+    })
+
+    if (response.status < 200 || response.status > 299) throw response
+
+    const data = await response.json()
+
+    return { data }
   },
-  deleteOne: () => {
-    throw new Error("Not implemented")
+  deleteOne: async ({ resource, id }) => {
+    const response = await fetcher(`${apiUrl}/${resource}/${id}`, {
+      method: "DELETE"
+    })
+
+    const data = await response.json()
+
+    return { data }
   }
 }

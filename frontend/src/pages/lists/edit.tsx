@@ -7,17 +7,38 @@ export const ListEdit = () => {
     saveButtonProps,
     register,
     formState: { errors },
-  } = useForm({});
+    refineCore: { onFinish },
+    handleSubmit
+  } = useForm({
+    refineCoreProps: {
+      action: "edit",
+      resource: "lists"
+    }
+  });
 
   return (
-    <Edit saveButtonProps={saveButtonProps}>
+    <Edit saveButtonProps={{
+      ...saveButtonProps,
+      onClick: (e: React.BaseSyntheticEvent) => {
+        handleSubmit(
+          (values) => {
+            onFinish({
+              list: {
+                ...values
+              }
+            })
+          },
+          () => false
+        )(e)
+      }
+    }}>
       <Box
         component="form"
         sx={{ display: "flex", flexDirection: "column" }}
         autoComplete="off"
       >
         <TextField
-          {...register("title", {
+          {...register("name", {
             required: "This field is required",
           })}
           error={!!(errors as any)?.title}
@@ -26,8 +47,8 @@ export const ListEdit = () => {
           fullWidth
           InputLabelProps={{ shrink: true }}
           type="text"
-          label={"Title"}
-          name="title"
+          label={"List name"}
+          name="name"
         />
       </Box>
     </Edit>
