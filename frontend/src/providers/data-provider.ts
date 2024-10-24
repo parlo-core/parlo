@@ -47,8 +47,6 @@ export const dataProvider: DataProvider = {
     const params = new URLSearchParams()
 
     if (pagination) {
-      console.log("pagination", pagination)
-
       if (pagination.pageSize && pagination.current) {
         params.append("page", pagination.current.toString())
         params.append("per_page", pagination.pageSize.toString())

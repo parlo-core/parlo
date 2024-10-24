@@ -1,26 +1,31 @@
 import { Stack, Typography } from "@mui/material"
-import { useOne, useShow } from "@refinedev/core"
+import { useShow } from "@refinedev/core"
 import {
-  NumberField,
+  DateField,
   Show,
   TextFieldComponent as TextField
 } from "@refinedev/mui"
 
 export const ListShow = () => {
-  const { data, isLoading } = useOne({ resource: "lists", id: "1" })
-  const record = data?.data
+  const { queryResult } = useShow();
+  const { data, isLoading } = queryResult;
+  const record = data?.data.list;
 
   return (
     <Show isLoading={isLoading}>
       <Stack gap={1}>
         <Typography variant="body1" fontWeight="bold">
-          {"ID"}
+          {"List Name"}
         </Typography>
-        <NumberField value={record?.id ?? ""} />
+        <TextField value={record?.name} />
         <Typography variant="body1" fontWeight="bold">
-          {"Title"}
+          {"Created At"}
         </Typography>
-        <TextField value={record?.title} />
+        <DateField value={record?.created_at} format={"DD.MM.YYYY., hh:mm"} />
+        <Typography variant="body1" fontWeight="bold">
+          {"Last Updated At"}
+        </Typography>
+        <DateField value={record?.updated_at} format={"DD.MM.YYYY., hh:mm"}/>
       </Stack>
     </Show>
   )
