@@ -45,7 +45,7 @@ RSpec.describe Admin::ListsController, type: :request do
       }
     end
 
-    it 'updates an add-on' do
+    it 'updates a list' do
       put_with_token(token, "/admin/lists/#{list.id}", { list: update_params })
 
       aggregate_failures do
@@ -97,6 +97,29 @@ RSpec.describe Admin::ListsController, type: :request do
     context 'when list does not exist' do
       it 'returns not_found error' do
         delete_with_token(token, '/admin/lists/invalid')
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
+
+  describe 'show' do
+    let(:list) { create(:list, company:) }
+
+    before { list }
+
+    it 'returns list' do
+      get_with_token(token, "/admin/lists/#{list.id}")
+
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+        expect(json[:list][:name]).to eq(list.name)
+      end
+    end
+
+    context 'when list does not exist' do
+      it 'returns not_found error' do
+        get_with_token(token, '/admin/lists/invalid')
 
         expect(response).to have_http_status(:not_found)
       end

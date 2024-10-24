@@ -57,7 +57,7 @@ RSpec.describe Admin::ContactsController, type: :request do
       }
     end
 
-    it 'updates an add-on' do
+    it 'updates a contact' do
       put_with_token(token, "/admin/contacts/#{contact.id}", { contact: update_params })
 
       aggregate_failures do
@@ -111,6 +111,29 @@ RSpec.describe Admin::ContactsController, type: :request do
     context 'when contact does not exist' do
       it 'returns not_found error' do
         delete_with_token(token, '/admin/contacts/invalid')
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
+
+  describe 'show' do
+    let(:contact) { create(:contact, company:, list:) }
+
+    before { contact }
+
+    it 'returns contact' do
+      get_with_token(token, "/admin/contacts/#{contact.id}")
+
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+        expect(json[:contact][:name]).to eq(contact.name)
+      end
+    end
+
+    context 'when contact does not exist' do
+      it 'returns not_found error' do
+        get_with_token(token, '/admin/contacts/invalid')
 
         expect(response).to have_http_status(:not_found)
       end
