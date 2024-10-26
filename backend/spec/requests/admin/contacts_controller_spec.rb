@@ -174,5 +174,26 @@ RSpec.describe Admin::ContactsController, type: :request do
         end
       end
     end
+
+    context 'with list_id filter' do
+      let(:contact2) { create(:contact, company:, list: nil, email: 'second@example.com', name: 'second') }
+
+      before { contact2 }
+
+      it 'returns contacts for correct list' do
+        get_with_token(token, "/admin/contacts?page=1&per_page=1&list_id=#{list.id}")
+
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(json[:contacts].count).to eq(1)
+          expect(json[:contacts].first[:name]).to eq(contact.name)
+          expect(json[:meta][:current_page]).to eq(1)
+          expect(json[:meta][:next_page]).to eq(nil)
+          expect(json[:meta][:prev_page]).to eq(nil)
+          expect(json[:meta][:total_pages]).to eq(1)
+          expect(json[:meta][:total_count]).to eq(1)
+        end
+      end
+    end
   end
 end

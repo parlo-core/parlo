@@ -46,9 +46,10 @@ module Admin
 
     def index
       contacts = current_company.contacts
-                                .order(created_at: :desc)
-                                .page(params[:page])
-                                .per(params[:per_page] || PER_PAGE)
+      contacts = contacts.where(list_id: params[:list_id]) if params[:list_id]
+      contacts = contacts.order(created_at: :desc)
+                         .page(params[:page])
+                         .per(params[:per_page] || PER_PAGE)
 
       render(
         json: ::CollectionSerializer.new(
