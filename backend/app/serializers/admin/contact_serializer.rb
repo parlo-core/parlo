@@ -4,6 +4,7 @@ module Admin
   class ContactSerializer < ResourceSerializer
     def serialize
       {
+        id: resource.id,
         name: resource.name,
         status: resource.status,
         email: resource.email,
