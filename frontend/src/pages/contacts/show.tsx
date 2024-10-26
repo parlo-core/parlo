@@ -5,12 +5,11 @@ import {
   Show,
   TextFieldComponent as TextField
 } from "@refinedev/mui"
-import { ContactList } from "../contacts"
 
-export const ListShow = () => {
+export const ContactShow = () => {
   const { queryResult } = useShow();
   const { data, isLoading } = queryResult;
-  const record = data?.data.list;
+  const record = data?.data.contact;
 
   return (
     <Show isLoading={isLoading}>
@@ -28,9 +27,6 @@ export const ListShow = () => {
         </Typography>
         <DateField value={record?.updated_at} format={"DD.MM.YYYY., hh:mm"}/>
       </Stack>
-      {/* Embed Contacts for this list */}
-      <h2>Contacts</h2>
-      <ContactList listId={id} />
     </Show>
   )
 }

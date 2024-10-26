@@ -20,6 +20,7 @@ import { ForgotPassword } from "./pages/forgotPassword"
 import { Login } from "./pages/login"
 import { Register } from "./pages/register"
 import { ListCreate, ListEdit, ListList, ListShow } from "./pages/lists"
+import { ContactCreate, ContactEdit, ContactList, ContactShow } from "./pages/contacts"
 
 function App() {
   return (
@@ -35,26 +36,6 @@ function App() {
               routerProvider={routerBindings}
               authProvider={authProvider}
               resources={[
-                // {
-                //   name: "blog_posts",
-                //   list: "/blog-posts",
-                //   create: "/blog-posts/create",
-                //   edit: "/blog-posts/edit/:id",
-                //   show: "/blog-posts/show/:id",
-                //   meta: {
-                //     canDelete: true
-                //   }
-                // },
-                // {
-                //   name: "categories",
-                //   list: "/categories",
-                //   create: "/categories/create",
-                //   edit: "/categories/edit/:id",
-                //   show: "/categories/show/:id",
-                //   meta: {
-                //     canDelete: true
-                //   }
-                // },
                 {
                   name: "lists",
                   list: "/lists",
@@ -64,6 +45,9 @@ function App() {
                   meta: {
                     canDelete: true
                   }
+                },
+                {
+                  name: "contacts",
                 }
               ]}
               options={{
@@ -90,24 +74,19 @@ function App() {
                     </Authenticated>
                   }
                 >
-                  <Route index element={<NavigateToResource resource="blog_posts" />} />
-                  {/*<Route path="/blog-posts">*/}
-                  {/*  <Route index element={<BlogPostList />} />*/}
-                  {/*  <Route path="create" element={<BlogPostCreate />} />*/}
-                  {/*  <Route path="edit/:id" element={<BlogPostEdit />} />*/}
-                  {/*  <Route path="show/:id" element={<BlogPostShow />} />*/}
-                  {/*</Route>*/}
-                  {/*<Route path="/categories">*/}
-                  {/*  <Route index element={<CategoryList />} />*/}
-                  {/*  <Route path="create" element={<CategoryCreate />} />*/}
-                  {/*  <Route path="edit/:id" element={<CategoryEdit />} />*/}
-                  {/*  <Route path="show/:id" element={<CategoryShow />} />*/}
-                  {/*</Route>*/}
+                  <Route index element={<NavigateToResource resource="lists" />} />
                   <Route path="/lists">
                     <Route index element={<ListList />} />
                     <Route path="create" element={<ListCreate />} />
                     <Route path="edit/:id" element={<ListEdit />} />
                     <Route path="show/:id" element={<ListShow />} />
+                    {/* Contacts as a nested resource under lists */}
+                    <Route path=":listId/contacts">
+                      <Route index element={<ContactList />} />
+                      <Route path="create" element={<ContactCreate />} />
+                      <Route path="edit/:contactId" element={<ContactEdit />} />
+                      <Route path="show/:contactId" element={<ContactShow />} />
+                    </Route>
                   </Route>
                   <Route path="*" element={<ErrorComponent />} />
                 </Route>
