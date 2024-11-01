@@ -45,10 +45,12 @@ module Admin
     end
 
     def index
-      templates = current_company.templates
-                                 .order(created_at: :desc)
-                                 .page(params[:page])
-                                 .per(params[:per_page] || PER_PAGE)
+      templates = TemplatesQuery.new(
+        company: current_company,
+        search_term: params[:search_term],
+        page: params[:page],
+        limit: params[:per_page] || PER_PAGE
+      ).call.templates
 
       render(
         json: ::CollectionSerializer.new(
