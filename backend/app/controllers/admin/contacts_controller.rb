@@ -4,7 +4,7 @@ module Admin
   class ContactsController < BaseController
     def create
       result = Contacts::CreateService.new(
-        params: input_params.to_h.deep_symbolize_keys.merge(company_id: current_company.id, list_id: params[:list_id])
+        params: input_params.to_h.deep_symbolize_keys.merge(company_id: current_company.id)
       ).call
 
       if result.succeeded?
@@ -68,7 +68,8 @@ module Admin
         params.require(:contact).permit(
           :name,
           :status,
-          :email
+          :email,
+          :list_id
         )
     end
 
