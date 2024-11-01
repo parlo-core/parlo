@@ -14,4 +14,8 @@ class Contact < ApplicationRecord
   ].freeze
 
   enum status: STATUSES
+
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[name email]
+  end
 end

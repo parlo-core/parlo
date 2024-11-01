@@ -45,10 +45,12 @@ module Admin
     end
 
     def index
-      lists = current_company.lists
-                             .order(created_at: :desc)
-                             .page(params[:page])
-                             .per(params[:per_page] || PER_PAGE)
+      lists = ListsQuery.new(
+        company: current_company,
+        search_term: params[:search_term],
+        page: params[:page],
+        limit: params[:per_page] || PER_PAGE
+      ).call.lists
 
       render(
         json: ::CollectionSerializer.new(

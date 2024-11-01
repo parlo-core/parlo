@@ -18,12 +18,13 @@ RSpec.describe Admin::ContactsController, type: :request do
       {
         name: 'contact_test_123',
         email: 'contact_test_123@example.com',
-        status: 'unsubscribed'
+        status: 'unsubscribed',
+        list_id: list.id
       }
     end
 
     it 'creates a contact' do
-      post_with_token(token, "/admin/contacts?list_id=#{list.id}", { contact: create_params })
+      post_with_token(token, '/admin/contacts', { contact: create_params })
 
       aggregate_failures do
         expect(response).to have_http_status(:success)
