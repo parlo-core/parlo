@@ -4,7 +4,7 @@ module Admin
   class ContactsController < BaseController
     def create
       result = Contacts::CreateService.new(
-        params: input_params.to_h.deep_symbolize_keys.merge(company_id: current_company.id, list_id: params[:list_id])
+        params: input_params.to_h.deep_symbolize_keys.merge(company_id: current_company.id)
       ).call
 
       if result.succeeded?
@@ -45,11 +45,15 @@ module Admin
     end
 
     def index
-      contacts = current_company.contacts
-      contacts = contacts.where(list_id: params[:list_id]) if params[:list_id]
-      contacts = contacts.order(created_at: :desc)
-                         .page(params[:page])
-                         .per(params[:per_page] || PER_PAGE)
+      contacts = ContactsQuery.new(
+        company: current_company,
+        search_term: params[:search_term],
+        page: params[:page],
+        limit: params[:per_page] || PER_PAGE,
+        filters: {
+          list_id: params[:list_id]
+        }
+      ).call.contacts
 
       render(
         json: ::CollectionSerializer.new(
@@ -68,7 +72,8 @@ module Admin
         params.require(:contact).permit(
           :name,
           :status,
-          :email
+          :email,
+          :list_id
         )
     end
 
