@@ -15,9 +15,17 @@ export const ContactShow = () => {
     <Show isLoading={isLoading}>
       <Stack gap={1}>
         <Typography variant="body1" fontWeight="bold">
-          {"List Name"}
+          {"Name"}
         </Typography>
         <TextField value={record?.name} />
+        <Typography variant="body1" fontWeight="bold">
+          {"Email"}
+        </Typography>
+        <TextField value={record?.email} />
+        <Typography variant="body1" fontWeight="bold">
+          {"Status"}
+        </Typography>
+        <TextField value={record?.status} />
         <Typography variant="body1" fontWeight="bold">
           {"Created At"}
         </Typography>

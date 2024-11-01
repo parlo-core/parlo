@@ -11,6 +11,7 @@ export const ListShow = () => {
   const { queryResult } = useShow();
   const { data, isLoading } = queryResult;
   const record = data?.data.list;
+  const listId = record?.id;
 
   return (
     <Show isLoading={isLoading}>
@@ -30,7 +31,7 @@ export const ListShow = () => {
       </Stack>
       {/* Embed Contacts for this list */}
       <h2>Contacts</h2>
-      <ContactList listId={id} />
+      {listId ? <ContactList listId={listId} /> : null}
     </Show>
   )
 }

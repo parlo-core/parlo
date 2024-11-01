@@ -18,11 +18,21 @@ interface IContact {
 }
 
 interface ContactListProps {
-  listId: number;
+  listId?: string | undefined;
 }
 
-export const ContactList = ({listId}: ContactListProps) => {
-  const { dataGridProps } = useDataGrid<IContact>({ resource: "contacts", filters: [{ field: "listId", operator: "eq", value: listId }] })
+export const ContactList = ({ listId }: ContactListProps) => {
+  const { dataGridProps } = useDataGrid<IContact>({
+    resource: "contacts",
+    filters: {
+        // TODO: uncomment the following line
+        // permanent: [{
+        //   field: "list_id",
+        //   operator: "eq",
+        //   value: listId
+        // }]
+      }
+  })
 
   const columns = React.useMemo<GridColDef<IContact>[]>(
     () => [

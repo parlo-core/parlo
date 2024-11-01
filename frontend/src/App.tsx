@@ -81,12 +81,12 @@ function App() {
                     <Route path="edit/:id" element={<ListEdit />} />
                     <Route path="show/:id" element={<ListShow />} />
                     {/* Contacts as a nested resource under lists */}
-                    <Route path=":listId/contacts">
-                      <Route index element={<ContactList />} />
-                      <Route path="create" element={<ContactCreate />} />
-                      <Route path="edit/:contactId" element={<ContactEdit />} />
-                      <Route path="show/:contactId" element={<ContactShow />} />
-                    </Route>
+                    {/*<Route path=":listId/contacts">*/}
+                    {/*  <Route index element={<ContactList/>} />*/}
+                    {/*  <Route path="create" element={<ContactCreate />} />*/}
+                    {/*  <Route path="edit/:contactId" element={<ContactEdit />} />*/}
+                    {/*  <Route path="show/:contactId" element={<ContactShow />} />*/}
+                    {/*</Route>*/}
                   </Route>
                   <Route path="*" element={<ErrorComponent />} />
                 </Route>

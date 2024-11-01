@@ -23,7 +23,7 @@ export const ContactEdit = () => {
         handleSubmit(
           (values) => {
             onFinish({
-              list: {
+              contact: {
                 ...values
               }
             })
@@ -47,8 +47,35 @@ export const ContactEdit = () => {
           fullWidth
           InputLabelProps={{ shrink: true }}
           type="text"
-          label={"List name"}
+          label={"Contact name"}
           name="name"
+        />
+        <TextField
+          {...register("email", {
+            required: "This field is required",
+          })}
+          error={!!(errors as any)?.title}
+          helperText={(errors as any)?.title?.message}
+          margin="normal"
+          fullWidth
+          InputLabelProps={{ shrink: true }}
+          type="text"
+          label={"Email"}
+          name="email"
+        />
+        {/*TODO: change to dropdown select menu field*/}
+        <TextField
+          {...register("status", {
+            required: "This field is required",
+          })}
+          error={!!(errors as any)?.title}
+          helperText={(errors as any)?.title?.message}
+          margin="normal"
+          fullWidth
+          InputLabelProps={{ shrink: true }}
+          type="text"
+          label={"Status"}
+          name="status"
         />
       </Box>
     </Edit>
