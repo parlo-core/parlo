@@ -5,14 +5,25 @@ import {
   Show,
   TextFieldComponent as TextField
 } from "@refinedev/mui"
+import { useNavigate, useParams } from "react-router-dom"
+import React from "react"
+import IconButton from "@mui/material/IconButton"
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 
 export const ContactShow = () => {
-  const { queryResult } = useShow();
-  const { data, isLoading } = queryResult;
-  const record = data?.data.contact;
+  const { listId, contactId } = useParams()
+  const navigate = useNavigate()
+  const { queryResult } = useShow({
+    resource: "contacts",
+    id: contactId
+  })
+  const { data, isLoading } = queryResult
+  const record = data?.data.contact
 
   return (
-    <Show isLoading={isLoading}>
+    <Show isLoading={isLoading} goBack={<IconButton onClick={() => navigate(`/lists/show/${listId}`)}>
+      <ArrowBackIcon />
+    </IconButton>}>
       <Stack gap={1}>
         <Typography variant="body1" fontWeight="bold">
           {"Name"}
@@ -33,7 +44,7 @@ export const ContactShow = () => {
         <Typography variant="body1" fontWeight="bold">
           {"Last Updated At"}
         </Typography>
-        <DateField value={record?.updated_at} format={"DD.MM.YYYY., hh:mm"}/>
+        <DateField value={record?.updated_at} format={"DD.MM.YYYY., hh:mm"} />
       </Stack>
     </Show>
   )

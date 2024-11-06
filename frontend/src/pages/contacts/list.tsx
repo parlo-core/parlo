@@ -2,11 +2,11 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid"
 import {
   DeleteButton,
   EditButton,
-  List,
   ShowButton,
   useDataGrid
 } from "@refinedev/mui"
 import React from "react"
+import { useNavigate } from "react-router-dom"
 
 interface IContact {
   id: string;
@@ -22,16 +22,19 @@ interface ContactListProps {
 }
 
 export const ContactList = ({ listId }: ContactListProps) => {
+  const navigate = useNavigate();
+
   const { dataGridProps } = useDataGrid<IContact>({
     resource: "contacts",
     filters: {
-        // TODO: uncomment the following line
-        // permanent: [{
-        //   field: "list_id",
-        //   operator: "eq",
-        //   value: listId
-        // }]
-      }
+      permanent: [
+        {
+          field: "list_id",
+          operator: "eq",
+          value: listId
+        }
+      ]
+    }
   })
 
   const columns = React.useMemo<GridColDef<IContact>[]>(
@@ -75,9 +78,9 @@ export const ContactList = ({ listId }: ContactListProps) => {
         renderCell: function render({ row }) {
           return (
             <>
-              <EditButton hideText recordItemId={row.id} />
-              <ShowButton hideText recordItemId={row.id} />
-              <DeleteButton hideText recordItemId={row.id} />
+              <EditButton hideText onClick={() => navigate(`/lists/show/${listId}/contacts/edit/${row.id}`)} />
+              <ShowButton hideText onClick={() => navigate(`/lists/show/${listId}/contacts/show/${row.id}`)} />
+              <DeleteButton hideText recordItemId={row.id} resource={"contacts"} />
             </>
           )
         },
@@ -86,12 +89,10 @@ export const ContactList = ({ listId }: ContactListProps) => {
         minWidth: 80
       }
     ],
-    []
+    [navigate, listId]
   )
 
   return (
-    <List>
-      <DataGrid {...dataGridProps} columns={columns} autoHeight />
-    </List>
+    <DataGrid {...dataGridProps} columns={columns} autoHeight />
   )
 }

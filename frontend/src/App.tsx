@@ -20,7 +20,7 @@ import { ForgotPassword } from "./pages/forgotPassword"
 import { Login } from "./pages/login"
 import { Register } from "./pages/register"
 import { ListCreate, ListEdit, ListList, ListShow } from "./pages/lists"
-import { ContactCreate, ContactEdit, ContactList, ContactShow } from "./pages/contacts"
+import { ContactCreate, ContactEdit, ContactShow } from "./pages/contacts"
 
 function App() {
   return (
@@ -45,9 +45,6 @@ function App() {
                   meta: {
                     canDelete: true
                   }
-                },
-                {
-                  name: "contacts",
                 }
               ]}
               options={{
@@ -67,6 +64,7 @@ function App() {
                     <Authenticated
                       key="authenticated-inner"
                       fallback={<CatchAllNavigate to="/login" />}
+                      v3LegacyAuthProviderCompatible={false}
                     >
                       <ThemedLayoutV2 Header={() => <Header sticky />}>
                         <Outlet />
@@ -80,19 +78,19 @@ function App() {
                     <Route path="create" element={<ListCreate />} />
                     <Route path="edit/:id" element={<ListEdit />} />
                     <Route path="show/:id" element={<ListShow />} />
-                    {/* Contacts as a nested resource under lists */}
-                    {/*<Route path=":listId/contacts">*/}
-                    {/*  <Route index element={<ContactList/>} />*/}
-                    {/*  <Route path="create" element={<ContactCreate />} />*/}
-                    {/*  <Route path="edit/:contactId" element={<ContactEdit />} />*/}
-                    {/*  <Route path="show/:contactId" element={<ContactShow />} />*/}
-                    {/*</Route>*/}
+                    {/* Nested Routes for Contacts under a specific List */}
+                    <Route path="show/:listId/contacts">
+                      <Route path="create" element={<ContactCreate />} />
+                      <Route path="edit/:contactId" element={<ContactEdit />} />
+                      <Route path="show/:contactId" element={<ContactShow />} />
+                    </Route>
                   </Route>
                   <Route path="*" element={<ErrorComponent />} />
                 </Route>
                 <Route
                   element={
-                    <Authenticated key="authenticated-outer" fallback={<Outlet />}>
+                    <Authenticated key="authenticated-outer" fallback={<Outlet />}
+                                   v3LegacyAuthProviderCompatible={false}>
                       <NavigateToResource />
                     </Authenticated>
                   }
