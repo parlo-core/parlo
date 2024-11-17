@@ -10,10 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_13_181133) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_17_192446) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "campaigns", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "subject", null: false
+    t.string "from_name", null: false
+    t.string "from_email", null: false
+    t.datetime "starting_at"
+    t.uuid "list_id", null: false
+    t.uuid "template_id", null: false
+    t.uuid "company_id", null: false
+    t.jsonb "properties", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_campaigns_on_company_id"
+    t.index ["list_id"], name: "index_campaigns_on_list_id"
+    t.index ["template_id"], name: "index_campaigns_on_template_id"
+  end
 
   create_table "companies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
@@ -66,6 +82,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_13_181133) do
     t.index ["company_id"], name: "index_users_on_company_id"
   end
 
+  add_foreign_key "campaigns", "companies"
+  add_foreign_key "campaigns", "lists"
+  add_foreign_key "campaigns", "templates"
   add_foreign_key "contacts", "companies"
   add_foreign_key "contacts", "lists"
   add_foreign_key "lists", "companies"
