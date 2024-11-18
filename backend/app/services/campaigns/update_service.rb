@@ -11,7 +11,7 @@ module Campaigns
 
     def call
       return result.not_found_error!(resource: 'campaign') unless campaign
-      return result.validation_error!(messages: [field: :starting_at, code: 'invalid value']) unless valid_starting_at?
+      return result.validation_error!(messages: [field: :starting_at, code: 'invalid_value']) unless valid_starting_at?
 
       ActiveRecord::Base.transaction do
         template = campaign.template

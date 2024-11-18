@@ -9,11 +9,11 @@ module Campaigns
     end
 
     def call
-      return result.validation_error!(messages: [field: :starting_at, code: 'invalid value']) unless valid_starting_at?
+      return result.validation_error!(messages: [field: :starting_at, code: 'invalid_value']) unless valid_starting_at?
 
       ActiveRecord::Base.transaction do
         template = Template.create!(
-          name: params[:subject],
+          name: "Campaign template: #{params[:subject]}",
           content: params[:content],
           parent: false,
           company_id: params[:company_id]
