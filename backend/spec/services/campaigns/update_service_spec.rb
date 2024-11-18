@@ -83,6 +83,29 @@ RSpec.describe Campaigns::UpdateService, type: :service do
     end
   end
 
+  context 'when from email is invalid' do
+    let(:params) do
+      {
+        subject: 'New promotion 1',
+        from_name: 'Marketing Team 1',
+        from_email: 'marketing1@',
+        starting_at: Time.current.beginning_of_day + 1.day,
+        content: '<p>This is promotion1. Sign up and use 50% discount.</p>'
+      }
+    end
+
+    it 'returns validation error' do
+      result = update_service.call
+
+      aggregate_failures do
+        expect(result).not_to be_succeeded
+        expect(result.error).to be_a(ParloValidationError)
+        expect(result.error.messages.first[:field].to_s).to eq('from_email')
+        expect(result.error.messages.first[:code]).to eq('invalid_email_format')
+      end
+    end
+  end
+
   context 'when campaign cannot be found' do
     let(:campaign) { nil }
 
