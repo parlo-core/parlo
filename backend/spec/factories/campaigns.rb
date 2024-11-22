@@ -5,6 +5,7 @@ FactoryBot.define do
     sequence(:subject) { |n| "Campaign Subject #{n}" }
     from_name { 'Mark Doe' }
     from_email { 'jdoe@example.com' }
+    starting_at { Time.current + 5.days }
     company
     list
     template
