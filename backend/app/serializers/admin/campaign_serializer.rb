@@ -14,16 +14,14 @@ module Admin
       }
 
       payload = payload.merge(list:)
-      payload = payload.merge(template:)
-
-      payload
+      payload.merge(template:)
     end
 
     private
 
     def list
       ::Admin::ListSerializer.new(
-        resource.list,
+        resource.list
       ).serialize
     end
 

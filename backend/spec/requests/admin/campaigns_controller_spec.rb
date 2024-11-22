@@ -61,7 +61,7 @@ RSpec.describe Admin::CampaignsController, type: :request do
       {
         subject: 'campaign_test_123--',
         from_name: 'contact_test_123-name--',
-        from_email: 'contact_test_123--@example.com',
+        from_email: 'contact_test_123--@example.com'
       }
     end
 
