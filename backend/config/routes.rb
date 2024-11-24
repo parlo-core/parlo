@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :lists, only: %i[create update index destroy show]
     resources :contacts, only: %i[create update index destroy show]
     resources :templates, only: %i[create update index destroy show]
+    resources :campaigns, only: %i[create update index destroy show]
     resources :users, only: :create
     post '/login', to: 'auth#create'
   end
