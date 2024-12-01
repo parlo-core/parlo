@@ -77,7 +77,11 @@ module Admin
       # start with pending status when async job will be created
       csv_import = CsvImport.create!(company: current_company, file_path: file_path.to_s, status: :processing)
 
-      result = Contacts::CsvImportService.new(file_path:, company_id: current_company.id, list_id: params[:list_id]).call
+      result = Contacts::CsvImportService.new(
+        file_path:,
+        company_id: current_company.id,
+        list_id: params[:list_id]
+      ).call
 
       File.delete(file_path) if File.exist?(file_path)
 

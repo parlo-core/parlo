@@ -11,7 +11,7 @@ module ApiHelper
     processes_headers = configure_headers(token, headers)
 
     if params[:file].is_a?(Rack::Test::UploadedFile)
-      post(path, params: params, headers: processes_headers)
+      post(path, params:, headers: processes_headers)
     else
       post(path, params: params.to_json, headers: processes_headers)
     end

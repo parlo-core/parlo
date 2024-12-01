@@ -10,35 +10,41 @@ RSpec.describe Contacts::CsvImportService, type: :service do
   let(:file_path) { 'spec/fixtures/contacts.csv' }
 
   context 'when import is successful' do
-    it 'creates contacts' do
+    it 'creates 3 new contacts' do
       expect { import_service.call }.to change(Contact, :count).by(3)
+    end
 
-      contact1 = Contact.find_by(email: 'mrichards@example.com')
-      expect(contact1).to have_attributes(
-        name: 'Mark Richards',
-        email: 'mrichards@example.com',
-        status: 'subscribed',
-        company_id: company.id,
-        list_id: list.id
-      )
+    it 'creates correct data' do
+      import_service.call
 
-      contact2 = Contact.find_by(email: 'jexpress@example.com')
-      expect(contact2).to have_attributes(
-        name: 'Jane Express',
-        email: 'jexpress@example.com',
-        status: 'unsubscribed',
-        company_id: company.id,
-        list_id: list.id
-      )
+      aggregate_failures do
+        contact1 = Contact.find_by(email: 'mrichards@example.com')
+        expect(contact1).to have_attributes(
+          name: 'Mark Richards',
+          email: 'mrichards@example.com',
+          status: 'subscribed',
+          company_id: company.id,
+          list_id: list.id
+        )
 
-      contact3 = Contact.find_by(email: 'zoe@example.com')
-      expect(contact3).to have_attributes(
-        name: 'Ivan Zoe',
-        email: 'zoe@example.com',
-        status: 'subscribed',
-        company_id: company.id,
-        list_id: list.id
-      )
+        contact2 = Contact.find_by(email: 'jexpress@example.com')
+        expect(contact2).to have_attributes(
+          name: 'Jane Express',
+          email: 'jexpress@example.com',
+          status: 'unsubscribed',
+          company_id: company.id,
+          list_id: list.id
+        )
+
+        contact3 = Contact.find_by(email: 'zoe@example.com')
+        expect(contact3).to have_attributes(
+          name: 'Ivan Zoe',
+          email: 'zoe@example.com',
+          status: 'subscribed',
+          company_id: company.id,
+          list_id: list.id
+        )
+      end
     end
   end
 

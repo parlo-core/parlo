@@ -203,15 +203,24 @@ RSpec.describe Admin::ContactsController, type: :request do
     let(:upload_file) { Rack::Test::UploadedFile.new(file_path, 'text/csv') }
 
     context 'when the CSV file is valid' do
-      it 'imports contacts and returns success' do
-        expect {
+      it 'imports 3 new contacts' do
+        expect do
           post_with_token(
             token,
             "/admin/contacts/import?list_id=#{list.id}",
             { file: upload_file },
             { 'Content-Type' => 'multipart/form-data' }
           )
-        }.to change(Contact, :count).by(3)
+        end.to change(Contact, :count).by(3)
+      end
+
+      it 'stores correct data and return correct response' do
+        post_with_token(
+          token,
+          "/admin/contacts/import?list_id=#{list.id}",
+          { file: upload_file },
+          { 'Content-Type' => 'multipart/form-data' }
+        )
 
         aggregate_failures do
           expect(response).to have_http_status(:success)
@@ -251,19 +260,26 @@ RSpec.describe Admin::ContactsController, type: :request do
     context 'when the CSV file contains invalid data' do
       let(:contact) { create(:contact, name: 'contact-worldwide', email: 'zoe@example.com', company:) }
 
-      before do
-        contact
-      end
+      before { contact }
 
       it 'imports valid contacts and skips invalid ones' do
-        expect {
+        expect do
           post_with_token(
             token,
             "/admin/contacts/import?list_id=#{list.id}",
             { file: upload_file },
             { 'Content-Type' => 'multipart/form-data' }
           )
-        }.to change(Contact, :count).by(2)
+        end.to change(Contact, :count).by(2)
+      end
+
+      it 'returns correct response' do
+        post_with_token(
+          token,
+          "/admin/contacts/import?list_id=#{list.id}",
+          { file: upload_file },
+          { 'Content-Type' => 'multipart/form-data' }
+        )
 
         aggregate_failures do
           expect(response).to have_http_status(:unprocessable_entity)
