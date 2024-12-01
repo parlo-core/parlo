@@ -197,4 +197,108 @@ RSpec.describe Admin::ContactsController, type: :request do
       end
     end
   end
+
+  describe 'import' do
+    let(:file_path) { 'spec/fixtures/contacts.csv' }
+    let(:upload_file) { Rack::Test::UploadedFile.new(file_path, 'text/csv') }
+
+    context 'when the CSV file is valid' do
+      it 'imports 3 new contacts' do
+        expect do
+          post_with_token(
+            token,
+            "/admin/contacts/import?list_id=#{list.id}",
+            { file: upload_file },
+            { 'Content-Type' => 'multipart/form-data' }
+          )
+        end.to change(Contact, :count).by(3)
+      end
+
+      it 'stores correct data and return correct response' do
+        post_with_token(
+          token,
+          "/admin/contacts/import?list_id=#{list.id}",
+          { file: upload_file },
+          { 'Content-Type' => 'multipart/form-data' }
+        )
+
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(CsvImport.where(company:).order(created_at: :desc).first.status).to eq('completed')
+          expect(json[:message]).to eq('Import successfully processed')
+
+          contact1 = Contact.find_by(email: 'mrichards@example.com')
+          expect(contact1).to have_attributes(
+            name: 'Mark Richards',
+            email: 'mrichards@example.com',
+            status: 'subscribed',
+            company_id: company.id,
+            list_id: list.id
+          )
+
+          contact2 = Contact.find_by(email: 'jexpress@example.com')
+          expect(contact2).to have_attributes(
+            name: 'Jane Express',
+            email: 'jexpress@example.com',
+            status: 'unsubscribed',
+            company_id: company.id,
+            list_id: list.id
+          )
+
+          contact3 = Contact.find_by(email: 'zoe@example.com')
+          expect(contact3).to have_attributes(
+            name: 'Ivan Zoe',
+            email: 'zoe@example.com',
+            status: 'subscribed',
+            company_id: company.id,
+            list_id: list.id
+          )
+        end
+      end
+    end
+
+    context 'when the CSV file contains invalid data' do
+      let(:contact) { create(:contact, name: 'contact-worldwide', email: 'zoe@example.com', company:) }
+
+      before { contact }
+
+      it 'imports valid contacts and skips invalid ones' do
+        expect do
+          post_with_token(
+            token,
+            "/admin/contacts/import?list_id=#{list.id}",
+            { file: upload_file },
+            { 'Content-Type' => 'multipart/form-data' }
+          )
+        end.to change(Contact, :count).by(2)
+      end
+
+      it 'returns correct response' do
+        post_with_token(
+          token,
+          "/admin/contacts/import?list_id=#{list.id}",
+          { file: upload_file },
+          { 'Content-Type' => 'multipart/form-data' }
+        )
+
+        aggregate_failures do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(CsvImport.where(company:).order(created_at: :desc).first.status).to eq('failed')
+        end
+      end
+    end
+
+    context 'when no file is uploaded' do
+      it 'returns a 404 error' do
+        post_with_token(
+          token,
+          "/admin/contacts/import?list_id=#{list.id}",
+          { file: nil },
+          { 'Content-Type' => 'multipart/form-data' }
+        )
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
 end

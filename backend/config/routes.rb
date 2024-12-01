@@ -5,7 +5,10 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :lists, only: %i[create update index destroy show]
+
     resources :contacts, only: %i[create update index destroy show]
+    post '/contacts/import', to: 'contacts#import'
+
     resources :templates, only: %i[create update index destroy show]
     resources :campaigns, only: %i[create update index destroy show]
     resources :users, only: :create
