@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_17_192446) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_25_194045) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -51,6 +51,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_17_192446) do
     t.index ["list_id"], name: "index_contacts_on_list_id"
   end
 
+  create_table "csv_imports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "status", default: 0, null: false
+    t.string "file_path"
+    t.uuid "company_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_csv_imports_on_company_id"
+  end
+
   create_table "lists", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "company_id", null: false
     t.string "name", null: false
@@ -87,6 +96,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_17_192446) do
   add_foreign_key "campaigns", "templates"
   add_foreign_key "contacts", "companies"
   add_foreign_key "contacts", "lists"
+  add_foreign_key "csv_imports", "companies"
   add_foreign_key "lists", "companies"
   add_foreign_key "templates", "companies"
   add_foreign_key "users", "companies"

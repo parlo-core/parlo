@@ -10,7 +10,11 @@ module ApiHelper
   def post_with_token(token, path, params = {}, headers = {})
     processes_headers = configure_headers(token, headers)
 
-    post(path, params: params.to_json, headers: processes_headers)
+    if params[:file].is_a?(Rack::Test::UploadedFile)
+      post(path, params: params, headers: processes_headers)
+    else
+      post(path, params: params.to_json, headers: processes_headers)
+    end
   end
 
   def put_with_token(token, path, params = {}, headers = {})
