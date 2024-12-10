@@ -8,4 +8,5 @@ class Company < ApplicationRecord
   has_many :campaigns
 
   validates :name, presence: true
+  validates :country, country_code: true, unless: -> { country.nil? }
 end

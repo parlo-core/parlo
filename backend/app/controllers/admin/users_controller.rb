@@ -16,6 +16,10 @@ module Admin
       end
     end
 
+    def show
+      render_user_without_token(active_user)
+    end
+
     private
 
     def create_params
@@ -35,6 +39,15 @@ module Admin
           user,
           root_name: 'user',
           token:
+        )
+      )
+    end
+
+    def render_user_without_token(user)
+      render(
+        json: ::Admin::UserSerializer.new(
+          user,
+          root_name: 'user'
         )
       )
     end

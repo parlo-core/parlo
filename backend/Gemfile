@@ -19,6 +19,7 @@ gem 'jwt'
 gem 'rack-cors'
 
 # Other
+gem 'countries'
 gem 'tzinfo-data', platforms: %i[windows jruby]
 
 group :development, :test do

@@ -84,6 +84,8 @@ GEM
     builder (3.2.4)
     concurrent-ruby (1.2.3)
     connection_pool (2.4.1)
+    countries (7.0.0)
+      unaccent (~> 0.3)
     crass (1.0.6)
     database_cleaner-active_record (2.1.0)
       activerecord (>= 5.a)
@@ -272,6 +274,7 @@ GEM
     timeout (0.4.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    unaccent (0.4.0)
     unicode-display_width (2.5.0)
     webrick (1.8.1)
     websocket-driver (0.7.6)
@@ -290,6 +293,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootsnap
+  countries
   database_cleaner-active_record
   debug
   factory_bot_rails

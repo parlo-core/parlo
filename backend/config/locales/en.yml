@@ -12,6 +12,7 @@ en:
         inclusion: value_is_invalid
         invalid: value_is_invalid
         invalid_email_format: invalid_email_format
+        invalid_country_code: invalid_country_code
         less_than: value_is_out_of_range
         less_than_or_equal_to: value_is_out_of_range
         taken: value_already_exist

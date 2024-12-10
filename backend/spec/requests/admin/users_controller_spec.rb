@@ -21,7 +21,7 @@ RSpec.describe Admin::UsersController, type: :request do
 
         aggregate_failures do
           expect(response.status).to be(200)
-          expect(json[:user][:internal_id]).to be_present
+          expect(json[:user][:id]).to be_present
           expect(json[:user][:email]).to eq(email)
           expect(json[:user][:first_name]).to eq('John')
           expect(json[:user][:last_name]).to eq('Doe')
@@ -47,6 +47,28 @@ RSpec.describe Admin::UsersController, type: :request do
           expect(json[:error]).to eq('Unprocessable Entity')
           expect(json[:code]).to eq('validation_errors')
         end
+      end
+    end
+  end
+
+  describe 'show' do
+    let(:company) { create(:company) }
+    let(:user) { create(:user, company:) }
+    let(:token) { Auth::TokenService.new(user:).encode_token.token }
+
+    before do
+      user
+      token
+    end
+
+    it 'returns user' do
+      get_with_token(token, '/admin/users/current')
+
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+        expect(json[:user][:email]).to eq(user.email)
+        expect(json[:user][:first_name]).to eq(user.first_name)
+        expect(json[:user][:last_name]).to eq(user.last_name)
       end
     end
   end
