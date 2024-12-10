@@ -32,7 +32,7 @@ module Admin
           :zipcode,
           :city,
           :legal_name,
-          :tax_number,
+          :tax_number
         )
     end
 

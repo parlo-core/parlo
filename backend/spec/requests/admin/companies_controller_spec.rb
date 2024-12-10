@@ -24,7 +24,7 @@ RSpec.describe Admin::CompaniesController, type: :request do
     end
 
     it 'updates a country' do
-      put_with_token(token, "/admin/companies", { company: update_params })
+      put_with_token(token, '/admin/companies', { company: update_params })
 
       aggregate_failures do
         expect(response).to have_http_status(:success)
@@ -39,7 +39,7 @@ RSpec.describe Admin::CompaniesController, type: :request do
 
   describe 'show' do
     it 'returns company' do
-      get_with_token(token, "/admin/companies/current")
+      get_with_token(token, '/admin/companies/current')
 
       aggregate_failures do
         expect(response).to have_http_status(:success)
