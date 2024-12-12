@@ -22,7 +22,7 @@ RSpec.describe Admin::AuthController, type: :request do
 
         aggregate_failures do
           expect(response.status).to be(200)
-          expect(json[:user][:internal_id]).to be_present
+          expect(json[:user][:id]).to be_present
           expect(json[:user][:email]).to eq(email)
           expect(json[:user][:first_name]).to eq(user.first_name)
           expect(json[:user][:last_name]).to eq(user.last_name)
