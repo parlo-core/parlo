@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     put '/companies', to: 'companies#update'
     get '/companies/current', to: 'companies#show'
 
+    get '/insights', to: 'insights#show'
+
     post '/login', to: 'auth#create'
   end
 end

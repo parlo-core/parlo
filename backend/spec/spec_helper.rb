@@ -29,4 +29,19 @@ RSpec.configure do |config|
       example.run
     end
   end
+
+  config.before do |example|
+    if example.metadata[:cache]
+      Rails.cache = case example.metadata[:cache].to_sym
+                    when :memory
+                      ActiveSupport::Cache.lookup_store(:memory_store)
+                    when :null
+                      ActiveSupport::Cache.lookup_store(:null_store)
+                    when :redis
+                      ActiveSupport::Cache.lookup_store(:redis_cache_store)
+                    else
+                      raise "Unknown cache store: #{example.metadata[:cache]}"
+                    end
+    end
+  end
 end
