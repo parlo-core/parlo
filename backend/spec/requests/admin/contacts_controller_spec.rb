@@ -177,7 +177,7 @@ RSpec.describe Admin::ContactsController, type: :request do
     end
 
     context 'with list_id filter' do
-      let(:list2) { create(:list)}
+      let(:list2) { create(:list) }
       let(:contact2) { create(:contact, company:, list: list2, email: 'second@example.com', name: 'second') }
 
       before { contact2 }

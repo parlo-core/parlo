@@ -55,7 +55,7 @@ RSpec.describe Contacts::CreateService, type: :service do
         name: 'contact-worldwide',
         email: 'contact-ww@',
         company_id: company.id,
-        list_id: list.id,
+        list_id: list.id
       }
     end
 
