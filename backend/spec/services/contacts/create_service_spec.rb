@@ -33,7 +33,7 @@ RSpec.describe Contacts::CreateService, type: :service do
   end
 
   context 'when contact email already exists' do
-    let(:contact) { create(:contact, name: 'contact-worldwide', email: 'contact-ww@example.com', company:) }
+    let(:contact) { create(:contact, name: 'contact-worldwide', email: 'contact-ww@example.com', list:) }
 
     before { contact }
 
@@ -54,7 +54,8 @@ RSpec.describe Contacts::CreateService, type: :service do
       {
         name: 'contact-worldwide',
         email: 'contact-ww@',
-        company_id: company.id
+        company_id: company.id,
+        list_id: list.id,
       }
     end
 
@@ -75,7 +76,8 @@ RSpec.describe Contacts::CreateService, type: :service do
       {
         name: nil,
         email: 'contact-ww@example.com',
-        company_id: company.id
+        company_id: company.id,
+        list_id: list.id
       }
     end
 

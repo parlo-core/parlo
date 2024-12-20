@@ -50,14 +50,14 @@ module Campaigns
     end
 
     def valid_format?(datetime)
-      datetime.respond_to?(:strftime) || datetime.is_a?(String) && Time.zone.parse(datetime.to_s).present?
+      datetime.respond_to?(:strftime) || datetime.is_a?(String) && DateTime.iso8601(datetime.to_s)
     rescue ArgumentError
       false
     end
 
     def starting_at
       @starting_at ||= if params[:starting_at].is_a?(String)
-                         DateTime.strptime(params[:starting_at])
+                         DateTime.iso8601(params[:starting_at])
                        else
                          params[:starting_at]
                        end

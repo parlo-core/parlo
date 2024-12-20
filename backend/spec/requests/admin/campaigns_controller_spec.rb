@@ -20,7 +20,7 @@ RSpec.describe Admin::CampaignsController, type: :request do
         from_name: 'contact_test_123-name',
         from_email: 'contact_test_123@example.com',
         content: '<p>TTT</p>',
-        starting_at: '2024-12-18T10:00:00Z',
+        starting_at: Time.current.beginning_of_day + 1.day,
         list_id: list.id
       }
     end

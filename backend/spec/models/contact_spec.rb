@@ -3,9 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Contact, type: :model do
-  subject { described_class.new(name: 'Test List', email: 'test@example.com', company:) }
+  subject { described_class.new(name: 'Test List', email: 'test@example.com', company:, list:) }
 
   let(:company) { create(:company) }
+  let(:list) { create(:list, company:) }
 
   describe 'Validations' do
     it 'passes validations if all required attributes are given' do
