@@ -32,15 +32,16 @@ module Insights
     # rubocop:disable Layout/LineLength
     def fetch_campaign_insights
       Campaign
-        .joins('INNER JOIN lists ON campaigns.list_id = lists.id')
+        .joins('INNER JOIN campaign_lists ON campaign_lists.campaign_id = campaigns.id')
+        .joins('INNER JOIN lists ON lists.id = campaign_lists.list_id')
         .joins('INNER JOIN contacts ON contacts.list_id = lists.id')
         .where('campaigns.company_id = ?', company.id)
         .select(
           'campaigns.id AS campaign_id',
           'campaigns.subject AS campaign_subject',
           'campaigns.starting_at AS dispatched_date',
-          'COUNT(DISTINCT contacts.id) AS total_contacts',
-          'SUM(CASE WHEN contacts.status = 1 THEN 1 ELSE 0 END)::float / COUNT(DISTINCT contacts.id)::float * 100 AS unsubscribe_percentage'
+          'COUNT(DISTINCT contacts.email) AS total_contacts',
+          'COUNT(DISTINCT CASE WHEN contacts.status = 1 THEN contacts.email END)::float / COUNT(DISTINCT contacts.email)::float * 100 AS unsubscribe_percentage'
         )
         .where('campaigns.starting_at IS NOT NULL')
         .group('campaigns.id')

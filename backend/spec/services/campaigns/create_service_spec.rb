@@ -14,7 +14,7 @@ RSpec.describe Campaigns::CreateService, type: :service do
       from_email: 'marketing@example.com',
       starting_at: Time.current.beginning_of_day + 1.day,
       company_id: company.id,
-      list_id: list.id,
+      list_ids: [list.id],
       content: '<p>This is promotion. Sign up and use 50% discount.</p>'
     }
   end
@@ -30,7 +30,7 @@ RSpec.describe Campaigns::CreateService, type: :service do
         expect(result.campaign.from_email).to eq(params[:from_email])
         expect(result.campaign.starting_at).to eq(params[:starting_at])
         expect(result.campaign.company_id).to eq(params[:company_id])
-        expect(result.campaign.list_id).to eq(params[:list_id])
+        expect(result.campaign.lists.first.id).to eq(params[:list_ids].first)
 
         expect(result.template.content).to eq(params[:content])
         expect(result.template.parent).to eq(false)
@@ -48,7 +48,7 @@ RSpec.describe Campaigns::CreateService, type: :service do
         from_email: 'marketing@',
         starting_at: Time.current.beginning_of_day - 1.day,
         company_id: company.id,
-        list_id: list.id,
+        list_ids: [list.id],
         content: '<p>This is promotion. Sign up and use 50% discount.</p>'
       }
     end
@@ -73,7 +73,7 @@ RSpec.describe Campaigns::CreateService, type: :service do
         from_email: 'marketing@',
         starting_at: Time.current.beginning_of_day + 1.day,
         company_id: company.id,
-        list_id: list.id,
+        list_ids: [list.id],
         content: '<p>This is promotion. Sign up and use 50% discount.</p>'
       }
     end
@@ -98,7 +98,7 @@ RSpec.describe Campaigns::CreateService, type: :service do
         from_email: 'marketing@example.com',
         starting_at: Time.current.beginning_of_day + 1.day,
         company_id: company.id,
-        list_id: list.id,
+        list_ids: [list.id],
         content: '<p>This is promotion. Sign up and use 50% discount.</p>'
       }
     end
@@ -111,6 +111,31 @@ RSpec.describe Campaigns::CreateService, type: :service do
         expect(result.error).to be_a(ParloValidationError)
         expect(result.error.messages.first[:field].to_s).to eq('subject')
         expect(result.error.messages.first[:code]).to eq('value_is_mandatory')
+      end
+    end
+  end
+
+  context 'when list_ids is invalid' do
+    let(:params) do
+      {
+        subject: 'New promotion',
+        from_name: 'Marketing Team',
+        from_email: 'marketing@example.com',
+        starting_at: Time.current.beginning_of_day + 1.day,
+        company_id: company.id,
+        list_ids: [],
+        content: '<p>This is promotion. Sign up and use 50% discount.</p>'
+      }
+    end
+
+    it 'returns validation error' do
+      result = create_service.call
+
+      aggregate_failures do
+        expect(result).not_to be_succeeded
+        expect(result.error).to be_a(ParloValidationError)
+        expect(result.error.messages.first[:field].to_s).to eq('list_ids')
+        expect(result.error.messages.first[:code]).to eq('invalid_value')
       end
     end
   end

@@ -13,15 +13,17 @@ module Admin
         updated_at: resource.updated_at&.iso8601
       }
 
-      payload = payload.merge(list:)
+      payload = payload.merge(lists)
       payload.merge(template:)
     end
 
     private
 
-    def list
-      ::Admin::ListSerializer.new(
-        resource.list
+    def lists
+      ::CollectionSerializer.new(
+        resource.lists,
+        ::Admin::ListSerializer,
+        collection_name: 'lists'
       ).serialize
     end
 

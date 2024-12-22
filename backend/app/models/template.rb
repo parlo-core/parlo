@@ -2,6 +2,7 @@
 
 class Template < ApplicationRecord
   belongs_to :company
+  has_many :campaigns
 
   validates :name, presence: true
   validates :name, uniqueness: { scope: :company_id }

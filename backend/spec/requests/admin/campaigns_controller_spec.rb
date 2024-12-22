@@ -21,7 +21,7 @@ RSpec.describe Admin::CampaignsController, type: :request do
         from_email: 'contact_test_123@example.com',
         content: '<p>TTT</p>',
         starting_at: Time.current.beginning_of_day + 1.day,
-        list_id: list.id
+        list_ids: [list.id]
       }
     end
 
@@ -36,7 +36,7 @@ RSpec.describe Admin::CampaignsController, type: :request do
 
         campaign = Campaign.find_by(from_email: 'contact_test_123@example.com')
 
-        expect(campaign.list_id).to eq(list.id)
+        expect(campaign.lists.first.id).to eq(list.id)
         expect(campaign.company_id).to eq(company.id)
         expect(campaign.template_id).to be_present
 
@@ -56,7 +56,7 @@ RSpec.describe Admin::CampaignsController, type: :request do
   end
 
   describe 'update' do
-    let(:campaign) { create(:campaign, company:, list:) }
+    let(:campaign) { create(:campaign, company:) }
     let(:update_params) do
       {
         subject: 'campaign_test_123--',
@@ -86,7 +86,7 @@ RSpec.describe Admin::CampaignsController, type: :request do
   end
 
   describe 'destroy' do
-    let(:campaign) { create(:campaign, company:, list:) }
+    let(:campaign) { create(:campaign, company:) }
 
     before { campaign }
 
@@ -114,7 +114,7 @@ RSpec.describe Admin::CampaignsController, type: :request do
   end
 
   describe 'show' do
-    let(:campaign) { create(:campaign, company:, list:) }
+    let(:campaign) { create(:campaign, company:) }
 
     before { campaign }
 
@@ -137,7 +137,7 @@ RSpec.describe Admin::CampaignsController, type: :request do
   end
 
   describe 'index' do
-    let(:campaign) { create(:campaign, company:, list:) }
+    let(:campaign) { create(:campaign, company:) }
 
     before { campaign }
 
@@ -152,7 +152,7 @@ RSpec.describe Admin::CampaignsController, type: :request do
     end
 
     context 'with pagination' do
-      let(:campaign2) { create(:campaign, company:, list:, from_email: 'second@example.com', subject: 'second') }
+      let(:campaign2) { create(:campaign, company:, from_email: 'second@example.com', subject: 'second') }
 
       before { campaign2 }
 

@@ -8,7 +8,7 @@ RSpec.describe Campaigns::UpdateService, type: :service do
   let(:company) { create(:company) }
   let(:list) { create(:list, company:) }
   let(:template) { create(:template, company:) }
-  let(:campaign) { create(:campaign, company:, list:, template:) }
+  let(:campaign) { create(:campaign, company:, template:) }
   let(:params) do
     {
       subject: 'New promotion 1',

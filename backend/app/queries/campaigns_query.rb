@@ -12,7 +12,7 @@ class CampaignsQuery < BaseQuery
   private
 
   def base_scope
-    company.campaigns.includes(:template, :list).ransack(search_params)
+    company.campaigns.includes(:template, :lists).ransack(search_params)
   end
 
   def search_params
