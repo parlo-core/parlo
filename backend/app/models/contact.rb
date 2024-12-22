@@ -2,10 +2,10 @@
 
 class Contact < ApplicationRecord
   belongs_to :company
-  belongs_to :list, optional: true
+  belongs_to :list
 
   validates :name, :email, presence: true
-  validates :email, uniqueness: true
+  validates :email, uniqueness: { scope: :list_id }
   validates :email, email: true
 
   STATUSES = %i[

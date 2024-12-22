@@ -49,7 +49,7 @@ RSpec.describe Contacts::CsvImportService, type: :service do
   end
 
   context 'when contact email already exists' do
-    let(:contact) { create(:contact, name: 'contact-worldwide', email: 'zoe@example.com', company:) }
+    let(:contact) { create(:contact, name: 'contact-worldwide', email: 'zoe@example.com', company:, list:) }
 
     before { contact }
 

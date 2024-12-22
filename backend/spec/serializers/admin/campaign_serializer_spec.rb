@@ -6,6 +6,10 @@ RSpec.describe ::Admin::CampaignSerializer do
   subject(:serializer) { described_class.new(campaign, root_name: 'campaign') }
 
   let(:campaign) { create(:campaign) }
+  let(:list) { create(:list) }
+  let(:campaign_list) { create(:campaign_list, campaign:, list:) }
+
+  before { campaign_list }
 
   it 'serializes the object' do
     result = JSON.parse(serializer.to_json)
@@ -16,7 +20,7 @@ RSpec.describe ::Admin::CampaignSerializer do
       expect(result['campaign']['from_name']).to eq(campaign.from_name)
       expect(result['campaign']['from_email']).to eq(campaign.from_email)
       expect(result['campaign']['starting_at']).to eq(campaign.starting_at.iso8601)
-      expect(result['campaign']['list']['name']).to eq(campaign.list.name)
+      expect(result['campaign']['lists'].first['name']).to eq(campaign_list.list.name)
       expect(result['campaign']['template']['content']).to eq(campaign.template.content)
     end
   end

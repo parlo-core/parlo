@@ -71,8 +71,8 @@ module Admin
           :from_name,
           :from_email,
           :starting_at,
-          :list_id,
-          :content
+          :content,
+          list_ids: []
         )
     end
 

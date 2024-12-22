@@ -10,24 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_08_202436) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_21_163645) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "campaign_lists", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "campaign_id", null: false
+    t.uuid "list_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id"], name: "index_campaign_lists_on_campaign_id"
+    t.index ["list_id"], name: "index_campaign_lists_on_list_id"
+  end
 
   create_table "campaigns", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "subject", null: false
     t.string "from_name", null: false
     t.string "from_email", null: false
     t.datetime "starting_at"
-    t.uuid "list_id", null: false
     t.uuid "template_id", null: false
     t.uuid "company_id", null: false
     t.jsonb "properties", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["company_id"], name: "index_campaigns_on_company_id"
-    t.index ["list_id"], name: "index_campaigns_on_list_id"
     t.index ["template_id"], name: "index_campaigns_on_template_id"
   end
 
@@ -51,11 +58,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_08_202436) do
     t.integer "status", default: 0, null: false
     t.jsonb "properties", default: {}, null: false
     t.uuid "company_id", null: false
-    t.uuid "list_id"
+    t.uuid "list_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["company_id"], name: "index_contacts_on_company_id"
-    t.index ["email"], name: "index_contacts_on_email", unique: true
+    t.index ["email", "list_id"], name: "index_contacts_on_email_and_list_id", unique: true
     t.index ["list_id"], name: "index_contacts_on_list_id"
   end
 
@@ -99,8 +106,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_08_202436) do
     t.index ["company_id"], name: "index_users_on_company_id"
   end
 
+  add_foreign_key "campaign_lists", "campaigns"
+  add_foreign_key "campaign_lists", "lists"
   add_foreign_key "campaigns", "companies"
-  add_foreign_key "campaigns", "lists"
   add_foreign_key "campaigns", "templates"
   add_foreign_key "contacts", "companies"
   add_foreign_key "contacts", "lists"

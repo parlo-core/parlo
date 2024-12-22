@@ -4,11 +4,10 @@ require 'rails_helper'
 
 RSpec.describe Campaign, type: :model do
   subject do
-    described_class.new(subject: 'Test Campaign', company:, list:, template:, from_name: 'a', from_email: 'a@ex.com')
+    described_class.new(subject: 'Test Campaign', company:, template:, from_name: 'a', from_email: 'a@ex.com')
   end
 
   let(:company) { create(:company) }
-  let(:list) { create(:list, company:) }
   let(:template) { create(:template, company:) }
 
   describe 'Validations' do

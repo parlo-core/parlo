@@ -13,23 +13,26 @@ RSpec.describe Admin::InsightsController, type: :request do
   end
 
   describe 'show' do
-    let(:campaign) { create(:campaign, company:, list:, subject: 's1', starting_at: Time.current) }
+    let(:campaign) { create(:campaign, company:, subject: 's1', starting_at: Time.current) }
     let(:list) { create(:list, company:, name: 'l1') }
+    let(:campaign_list) { create(:campaign_list, campaign:, list:) }
     let(:contact1) { create(:contact, company:, list:, email: 't1@example.com') }
     let(:contact2) { create(:contact, company:, list:, email: 't2@example.com') }
     let(:contact3) { create(:contact, company:, list:, email: 't3@example.com', status: 'unsubscribed') }
 
-    let(:campaign2) { create(:campaign, company:, list: list2, subject: 's2', starting_at: Time.current - 1.day) }
+    let(:campaign2) { create(:campaign, company:, subject: 's2', starting_at: Time.current - 1.day) }
     let(:list2) { create(:list, company:, name: 'l2') }
+    let(:campaign_list2) { create(:campaign_list, campaign: campaign2, list: list2) }
     let(:contact11) { create(:contact, company:, list: list2, email: 't11@example.com') }
     let(:contact22) { create(:contact, company:, list: list2, email: 't22@example.com') }
 
     let(:company3) { create(:company, name: '3') }
     let(:list3) { create(:list, company: company3, name: 'l3') }
+    let(:campaign_list3) { create(:campaign_list, campaign: campaign3, list: list3) }
     let(:contact111) { create(:contact, company: company3, list: list3, email: 't111@example.com') }
     let(:contact222) { create(:contact, company: company3, list: list3, email: 't222@example.com') }
     let(:campaign3) do
-      create(:campaign, company: company3, list: list3, subject: 's3', starting_at: Time.current - 2.days)
+      create(:campaign, company: company3, subject: 's3', starting_at: Time.current - 2.days)
     end
 
     before do
@@ -46,6 +49,9 @@ RSpec.describe Admin::InsightsController, type: :request do
       list3
       contact111
       contact222
+      campaign_list
+      campaign_list2
+      campaign_list3
 
       Rails.cache.clear
     end

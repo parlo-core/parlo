@@ -32,7 +32,7 @@ RSpec.describe Contacts::UpdateService, type: :service do
   end
 
   context 'when email already exists' do
-    let(:contact2) { create(:contact, email: 'email1298@example.com') }
+    let(:contact2) { create(:contact, email: 'email1298@example.com', list:) }
 
     before { contact2 }
 

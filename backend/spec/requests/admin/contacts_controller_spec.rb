@@ -177,7 +177,8 @@ RSpec.describe Admin::ContactsController, type: :request do
     end
 
     context 'with list_id filter' do
-      let(:contact2) { create(:contact, company:, list: nil, email: 'second@example.com', name: 'second') }
+      let(:list2) { create(:list) }
+      let(:contact2) { create(:contact, company:, list: list2, email: 'second@example.com', name: 'second') }
 
       before { contact2 }
 
@@ -258,7 +259,7 @@ RSpec.describe Admin::ContactsController, type: :request do
     end
 
     context 'when the CSV file contains invalid data' do
-      let(:contact) { create(:contact, name: 'contact-worldwide', email: 'zoe@example.com', company:) }
+      let(:contact) { create(:contact, name: 'contact-worldwide', email: 'zoe@example.com', company:, list:) }
 
       before { contact }
 

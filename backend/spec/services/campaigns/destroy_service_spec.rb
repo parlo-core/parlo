@@ -7,7 +7,7 @@ RSpec.describe Campaigns::DestroyService, type: :service do
 
   let(:company) { create(:company) }
   let(:list) { create(:list, company:) }
-  let(:campaign) { create(:campaign, company:, list:) }
+  let(:campaign) { create(:campaign, company:) }
 
   before { campaign }
 

@@ -2,8 +2,9 @@
 
 class Campaign < ApplicationRecord
   belongs_to :company
-  belongs_to :list
   belongs_to :template
+  has_many :campaign_lists, dependent: :destroy
+  has_many :lists, through: :campaign_lists
 
   validates :subject, presence: true
   validates :from_email, email: true

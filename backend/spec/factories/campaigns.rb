@@ -7,7 +7,6 @@ FactoryBot.define do
     from_email { 'jdoe@example.com' }
     starting_at { Time.current + 5.days }
     company
-    list
     template
   end
 end
