@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_21_163645) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_25_235048) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -103,7 +103,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_21_163645) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "company_id", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
     t.index ["company_id"], name: "index_users_on_company_id"
+    t.index ["email"], name: "index_users_on_email"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "campaign_lists", "campaigns"
