@@ -12,6 +12,12 @@ Rails.application.routes.draw do
     resources :templates, only: %i[create update index destroy show]
     resources :campaigns, only: %i[create update index destroy show]
     resources :users, only: :create
+    resources :passwords, only: [] do
+      collection do
+        post :forgot
+        post :reset
+      end
+    end
     get '/users/current', to: 'users#show'
 
     put '/companies', to: 'companies#update'
