@@ -11,7 +11,7 @@ module Passwords
 
     def call
       return result.not_found_error!(resource: 'user') unless user
-      return result.validation_error!(messages: [field: :password, code: 'invalid_value']) unless new_password
+      return result.validation_error!(messages: [field: :password, code: 'invalid_value']) if new_password.blank?
       unless user&.password_reset_token_valid?
         return result.validation_error!(messages: [field: :reset_password_token, code: 'expired'])
       end
