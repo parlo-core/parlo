@@ -72,7 +72,13 @@ module Admin
           :from_email,
           :starting_at,
           :content,
-          list_ids: []
+          list_ids: [],
+          file_uploads: [
+            :file_url,
+            :file_name,
+            :file_type,
+            :file_size
+          ]
         )
     end
 

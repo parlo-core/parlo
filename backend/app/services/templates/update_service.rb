@@ -12,18 +12,39 @@ module Templates
     def call
       return result.not_found_error!(resource: 'template') unless template
 
-      template.name = params[:name] if params.key?(:name)
-      template.content = params[:content] if params.key?(:content)
-      template.save!
+      ActiveRecord::Base.transaction do
+        template.name = params[:name] if params.key?(:name)
+        template.content = params[:content] if params.key?(:content)
+        template.save!
 
-      result.template = template
+        # Sanitize should be extra spec wrapped in async job
+
+        params[:file_uploads].each do |file|
+          next if existing_file_uploads.include?(file[:file_url])
+
+          FileUpload.create!(
+            file_url: file[:file_url],
+            file_name: file[:file_name],
+            file_type: file[:file_type],
+            file_size: file[:file_size],
+            company_id: template.company_id
+          )
+        end
+
+        result.template = template
+      rescue ActiveRecord::RecordInvalid => e
+        result.record_validation_error!(record: e.record)
+      end
+
       result
-    rescue ActiveRecord::RecordInvalid => e
-      result.record_validation_error!(record: e.record)
     end
 
     private
 
     attr_reader :template, :params
+
+    def existing_file_uploads
+      FileUpload.where(company_id: template.company_id).pluck(:file_url)
+    end
   end
 end

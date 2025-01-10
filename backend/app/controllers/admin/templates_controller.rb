@@ -68,7 +68,13 @@ module Admin
       @input_params ||=
         params.require(:template).permit(
           :name,
-          :content
+          :content,
+          file_uploads: [
+            :file_url,
+            :file_name,
+            :file_type,
+            :file_size
+          ]
         )
     end
 
