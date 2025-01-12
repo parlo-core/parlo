@@ -25,16 +25,17 @@ module Campaigns
         template.save!
         campaign.save!
 
-        params[:file_uploads].each do |file|
-          next if existing_file_uploads.include?(file[:file_url])
-
-          FileUpload.create!(
-            file_url: file[:file_url],
-            file_name: file[:file_name],
-            file_type: file[:file_type],
-            file_size: file[:file_size],
-            company_id: campaign.company_id
-          )
+        # Only new uploads created with update
+        if params[:file_uploads].present?
+          params[:file_uploads].each do |file|
+            FileUpload.create!(
+              file_url: file[:file_url],
+              file_name: file[:file_name],
+              file_type: file[:file_type],
+              file_size: file[:file_size],
+              company_id: campaign.company_id
+            )
+          end
         end
 
         result.template = template
@@ -69,10 +70,6 @@ module Campaigns
                        else
                          params[:starting_at]
                        end
-    end
-
-    def existing_file_uploads
-      FileUpload.where(company_id: campaign.company_id).pluck(:file_url)
     end
   end
 end

@@ -15,7 +15,15 @@ RSpec.describe Campaigns::UpdateService, type: :service do
       from_name: 'Marketing Team 1',
       from_email: 'marketing1@example.com',
       starting_at: Time.current.beginning_of_day + 1.day,
-      content: '<p>This is promotion1. Sign up and use 50% discount.</p>'
+      content: '<p>This is promotion1. Sign up and use 50% discount.</p>',
+      file_uploads: [
+        {
+          file_url: 'url.example.com',
+          file_name: 'test',
+          file_type: 'image/jpeg',
+          file_size: 1000
+        }
+      ]
     }
   end
 
@@ -34,6 +42,10 @@ RSpec.describe Campaigns::UpdateService, type: :service do
 
         expect(result.template.content).to eq(params[:content])
       end
+    end
+
+    it 'creates file upload record' do
+      expect { update_service.call }.to change(FileUpload, :count).by(1)
     end
   end
 

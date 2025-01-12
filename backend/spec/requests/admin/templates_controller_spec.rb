@@ -30,6 +30,28 @@ RSpec.describe Admin::TemplatesController, type: :request do
       end
     end
 
+    context 'when files are passed' do
+      let(:create_params) do
+        {
+          name: 'template_test_1',
+          content: '<div>Test</div>',
+          file_uploads: [
+            {
+              file_url: 'url.example.com',
+              file_name: 'test',
+              file_type: 'image/jpeg',
+              file_size: 1000
+            }
+          ]
+        }
+      end
+
+      it 'creates file upload record' do
+        expect { post_with_token(token, '/admin/templates', { template: create_params }) }
+          .to change(FileUpload, :count).by(1)
+      end
+    end
+
     context 'when token is invalid' do
       it 'returns unauthorized error' do
         post_with_token('invalid-token', '/admin/templates', { template: create_params })

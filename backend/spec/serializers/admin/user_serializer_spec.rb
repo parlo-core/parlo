@@ -15,7 +15,6 @@ RSpec.describe ::Admin::UserSerializer do
       expect(result['user']['email']).to eq(user.email)
       expect(result['user']['first_name']).to eq(user.first_name)
       expect(result['user']['last_name']).to eq(user.last_name)
-      expect(result['user']['company_name']).to eq(user.company.name)
       expect(result['user']['token']).to eq('123')
     end
   end

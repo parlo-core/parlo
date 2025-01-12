@@ -17,14 +17,16 @@ module Templates
           company_id: params[:company_id]
         )
 
-        params[:file_uploads].each do |file|
-          FileUpload.create!(
-            file_url: file[:file_url],
-            file_name: file[:file_name],
-            file_type: file[:file_type],
-            file_size: file[:file_size],
-            company_id: params[:company_id]
-          )
+        if params[:file_uploads].present?
+          params[:file_uploads].each do |file|
+            FileUpload.create!(
+              file_url: file[:file_url],
+              file_name: file[:file_name],
+              file_type: file[:file_type],
+              file_size: file[:file_size],
+              company_id: params[:company_id]
+            )
+          end
         end
 
         result.template = template

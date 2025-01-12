@@ -46,6 +46,32 @@ RSpec.describe Admin::CampaignsController, type: :request do
       end
     end
 
+    context 'when files are passed' do
+      let(:create_params) do
+        {
+          subject: 'campaign_test_123',
+          from_name: 'contact_test_123-name',
+          from_email: 'contact_test_123@example.com',
+          content: '<p>TTT</p>',
+          starting_at: Time.current.beginning_of_day + 1.day,
+          list_ids: [list.id],
+          file_uploads: [
+            {
+              file_url: 'url.example.com',
+              file_name: 'test',
+              file_type: 'image/jpeg',
+              file_size: 1000
+            }
+          ]
+        }
+      end
+
+      it 'creates file upload record' do
+        expect { post_with_token(token, '/admin/campaigns', { campaign: create_params }) }
+          .to change(FileUpload, :count).by(1)
+      end
+    end
+
     context 'when token is invalid' do
       it 'returns unauthorized error' do
         post_with_token('invalid-token', '/admin/campaigns', { campaign: create_params })

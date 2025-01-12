@@ -15,7 +15,15 @@ RSpec.describe Campaigns::CreateService, type: :service do
       starting_at: Time.current.beginning_of_day + 1.day,
       company_id: company.id,
       list_ids: [list.id],
-      content: '<p>This is promotion. Sign up and use 50% discount.</p>'
+      content: '<p>This is promotion. Sign up and use 50% discount.</p>',
+      file_uploads: [
+        {
+          file_url: 'url.example.com',
+          file_name: 'test',
+          file_type: 'image/jpeg',
+          file_size: 1000
+        }
+      ]
     }
   end
 
@@ -37,6 +45,10 @@ RSpec.describe Campaigns::CreateService, type: :service do
         expect(result.template.name).to eq("Campaign template: #{params[:subject]}")
         expect(result.template.company_id).to eq(params[:company_id])
       end
+    end
+
+    it 'creates file upload record' do
+      expect { create_service.call }.to change(FileUpload, :count).by(1)
     end
   end
 

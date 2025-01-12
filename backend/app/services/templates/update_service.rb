@@ -17,18 +17,18 @@ module Templates
         template.content = params[:content] if params.key?(:content)
         template.save!
 
-        # Sanitize should be extra spec wrapped in async job
-
-        params[:file_uploads].each do |file|
-          next if existing_file_uploads.include?(file[:file_url])
-
-          FileUpload.create!(
-            file_url: file[:file_url],
-            file_name: file[:file_name],
-            file_type: file[:file_type],
-            file_size: file[:file_size],
-            company_id: template.company_id
-          )
+        # Only new uploads created with update
+        # Sanitize should be an action wrapped in async job
+        if params[:file_uploads].present?
+          params[:file_uploads].each do |file|
+            FileUpload.create!(
+              file_url: file[:file_url],
+              file_name: file[:file_name],
+              file_type: file[:file_type],
+              file_size: file[:file_size],
+              company_id: template.company_id
+            )
+          end
         end
 
         result.template = template
@@ -42,9 +42,5 @@ module Templates
     private
 
     attr_reader :template, :params
-
-    def existing_file_uploads
-      FileUpload.where(company_id: template.company_id).pluck(:file_url)
-    end
   end
 end

@@ -11,7 +11,15 @@ RSpec.describe Templates::CreateService, type: :service do
       name: 'template-worldwide',
       content: '<div>This is headline</div>',
       parent: true,
-      company_id: company.id
+      company_id: company.id,
+      file_uploads: [
+        {
+          file_url: 'url.example.com',
+          file_name: 'test',
+          file_type: 'image/jpeg',
+          file_size: 1000
+        }
+      ]
     }
   end
 
@@ -24,6 +32,10 @@ RSpec.describe Templates::CreateService, type: :service do
         expect(result.template.name).to eq('template-worldwide')
         expect(result.template.content).to eq('<div>This is headline</div>')
       end
+    end
+
+    it 'creates file upload record' do
+      expect { create_service.call }.to change(FileUpload, :count).by(1)
     end
   end
 

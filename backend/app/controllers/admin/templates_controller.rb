@@ -69,11 +69,11 @@ module Admin
         params.require(:template).permit(
           :name,
           :content,
-          file_uploads: [
-            :file_url,
-            :file_name,
-            :file_type,
-            :file_size
+          file_uploads: %i[
+            file_url
+            file_name
+            file_type
+            file_size
           ]
         )
     end
