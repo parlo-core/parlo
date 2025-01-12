@@ -93,10 +93,6 @@ services:
       - DATABASE_TEST_URL=postgresql://${POSTGRES_USER:-parlo}:${POSTGRES_PASSWORD:-placeholder}@db:5432/${POSTGRES_DB:-parlo_test}
       - REDIS_URL=redis://redis:6379
       - SECRET_KEY_BASE=${SECRET_KEY_BASE:-secret-key-base-format-hex-64}
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-tttttt}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-mmmmmm}
-      - AWS_REGION=${AWS_REGION:-aaa}
-      - AWS_BUCKET_NAME=${AWS_BUCKET_NAME:-bbb}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend_http.rule=Host(`api.parlo.dev`)"
