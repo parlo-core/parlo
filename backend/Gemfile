@@ -6,6 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.3.1'
 
 # Base
+gem 'aws-sdk-s3'
 gem 'bootsnap', require: false
 gem 'kaminari-activerecord'
 gem 'pg', '~> 1.1'
@@ -24,6 +25,7 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 
 group :development, :test do
   gem 'debug', platforms: %i[mri windows]
+  gem 'dotenv'
   gem 'factory_bot_rails'
   gem 'rspec-rails'
 end

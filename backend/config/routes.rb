@@ -23,6 +23,8 @@ Rails.application.routes.draw do
     put '/companies', to: 'companies#update'
     get '/companies/current', to: 'companies#show'
 
+    post 'uploads/presigned_url', to: 'uploads#presigned_url'
+
     get '/insights', to: 'insights#show'
 
     post '/login', to: 'auth#create'

@@ -12,14 +12,31 @@ module Templates
     def call
       return result.not_found_error!(resource: 'template') unless template
 
-      template.name = params[:name] if params.key?(:name)
-      template.content = params[:content] if params.key?(:content)
-      template.save!
+      ActiveRecord::Base.transaction do
+        template.name = params[:name] if params.key?(:name)
+        template.content = params[:content] if params.key?(:content)
+        template.save!
 
-      result.template = template
+        # Only new uploads created with update
+        # Sanitize should be an action wrapped in async job
+        if params[:file_uploads].present?
+          params[:file_uploads].each do |file|
+            FileUpload.create!(
+              file_url: file[:file_url],
+              file_name: file[:file_name],
+              file_type: file[:file_type],
+              file_size: file[:file_size],
+              company_id: template.company_id
+            )
+          end
+        end
+
+        result.template = template
+      rescue ActiveRecord::RecordInvalid => e
+        result.record_validation_error!(record: e.record)
+      end
+
       result
-    rescue ActiveRecord::RecordInvalid => e
-      result.record_validation_error!(record: e.record)
     end
 
     private

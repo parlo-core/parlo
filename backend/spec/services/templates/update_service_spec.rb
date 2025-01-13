@@ -10,7 +10,15 @@ RSpec.describe Templates::UpdateService, type: :service do
   let(:params) do
     {
       name: 'template-worldwide',
-      content: '<p>TT</p>'
+      content: '<p>TT</p>',
+      file_uploads: [
+        {
+          file_url: 'url.example.com',
+          file_name: 'test',
+          file_type: 'image/jpeg',
+          file_size: 1000
+        }
+      ]
     }
   end
 
@@ -25,6 +33,10 @@ RSpec.describe Templates::UpdateService, type: :service do
         expect(result.template.name).to eq('template-worldwide')
         expect(result.template.content).to eq('<p>TT</p>')
       end
+    end
+
+    it 'creates file upload record' do
+      expect { update_service.call }.to change(FileUpload, :count).by(1)
     end
   end
 

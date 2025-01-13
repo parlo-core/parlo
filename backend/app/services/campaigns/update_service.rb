@@ -25,6 +25,19 @@ module Campaigns
         template.save!
         campaign.save!
 
+        # Only new uploads created with update
+        if params[:file_uploads].present?
+          params[:file_uploads].each do |file|
+            FileUpload.create!(
+              file_url: file[:file_url],
+              file_name: file[:file_name],
+              file_type: file[:file_type],
+              file_size: file[:file_size],
+              company_id: campaign.company_id
+            )
+          end
+        end
+
         result.template = template
         result.campaign = campaign
       rescue ActiveRecord::RecordInvalid => e
