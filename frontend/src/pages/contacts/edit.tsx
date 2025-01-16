@@ -19,38 +19,43 @@ export const ContactEdit = () => {
     refineCoreProps: {
       action: "edit",
       resource: "contacts",
-      id: contactId
+      id: contactId,
+      redirect: false
     }
   })
 
   // Extract existing data for initial values
   const contact = queryResult?.data?.data.contact
 
+  const handleFormSubmit = async (values: any) => {
+    try {
+      await onFinish({
+        contact: {
+          ...values,
+          list_id: listId
+        }
+      })
+      navigate(`/lists/show/${listId}`)
+    } catch (error) {
+      console.error("Failed to edit contact:", error)
+    }
+  }
 
-  if (!queryResult || queryResult?.isLoading){
+  if (!queryResult || queryResult?.isLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
         <CircularProgress />
       </Box>
-    );
+    )
   }
 
   return (
     <Edit
       saveButtonProps={{
         ...saveButtonProps,
-        onClick: (e: React.BaseSyntheticEvent) => {
-          handleSubmit(
-            (values) => {
-              onFinish({
-                contact: {
-                  ...values,
-                  list_id: listId
-                }
-              })
-            },
-            () => false
-          )(e)
+        onClick: (e) => {
+          e.preventDefault()
+          handleSubmit(handleFormSubmit)()
         }
       }}
       goBack={
@@ -63,6 +68,10 @@ export const ContactEdit = () => {
         component="form"
         sx={{ display: "flex", flexDirection: "column" }}
         autoComplete="off"
+        onSubmit={(e) => {
+          e.preventDefault()
+          handleSubmit(handleFormSubmit)()
+        }}
       >
         <TextField
           {...register("name", {
