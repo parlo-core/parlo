@@ -1,7 +1,7 @@
 import { Box, FormControl, InputLabel, Select, TextField } from "@mui/material"
 import { Create } from "@refinedev/mui"
 import { useForm } from "@refinedev/react-hook-form"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import MenuItem from "@mui/material/MenuItem"
 
 enum Status {
@@ -11,6 +11,7 @@ enum Status {
 
 export const ContactCreate = () => {
   const { listId } = useParams()
+  const navigate = useNavigate()
   const {
     saveButtonProps,
     refineCore: { formLoading, onFinish },
@@ -21,31 +22,42 @@ export const ContactCreate = () => {
   } = useForm({
     refineCoreProps: {
       action: "create",
-      resource: "contacts"
+      resource: "contacts",
+      redirect: false
     }
   })
+
+  const handleFormSubmit = async (values: any) => {
+    try {
+      await onFinish({
+        contact: {
+          ...values,
+          list_id: listId
+        }
+      })
+      navigate(`/lists/show/${listId}`)
+    } catch (error) {
+      console.error("Failed to create contact:", error)
+    }
+  }
+
 
   return (
     <Create isLoading={formLoading} saveButtonProps={{
       ...saveButtonProps,
-      onClick: (e: React.BaseSyntheticEvent) => {
-        handleSubmit(
-          (values) => {
-            onFinish({
-              contact: {
-                ...values,
-                list_id: listId
-              }
-            })
-          },
-          () => false
-        )(e)
+      onClick: (e) => {
+        e.preventDefault()
+        handleSubmit(handleFormSubmit)()
       }
     }}>
       <Box
         component="form"
         sx={{ display: "flex", flexDirection: "column" }}
         autoComplete="off"
+        onSubmit={(e) => {
+          e.preventDefault()
+          handleSubmit(handleFormSubmit)()
+        }}
       >
         <TextField
           {...register("name", {
@@ -78,7 +90,7 @@ export const ContactCreate = () => {
           <Select
             {...register("status", {
               required: "This field is required",
-              validate: value => Object.values(Status).includes(value) || "Invalid status" // Type-safe validation
+              validate: value => Object.values(Status).includes(value) || "Invalid status"
             })}
             label="Status"
             defaultValue=""
