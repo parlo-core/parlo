@@ -104,3 +104,22 @@ services:
       - "traefik.http.routers.backend.service=backend"
       - "traefik.http.routers.backend.tls=true"
       - "traefik.http.services.backend.loadbalancer.server.port=3000"
+
+  worker:
+    image: backend
+    container_name: parlo_worker
+    restart: unless-stopped
+    command: bash -c "bundle install && ./scripts/start.worker.sh"
+    depends_on:
+      - backend
+    build:
+      context: ./backend
+      dockerfile: $PARLO_PATH/backend/Dockerfile.dev
+    volumes:
+      - $PARLO_PATH/backend:/app:delegated
+    environment:
+      - PARLO_API_URL=https://api.parlo.dev
+      - PARLO_FRONT_URL=${FRONT_URL:-https://app.parlo.dev}
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-parlo}:${POSTGRES_PASSWORD:-placeholder}@db:5432/${POSTGRES_DB:-parlo}
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE:-secret-key-base-format-hex-64}
