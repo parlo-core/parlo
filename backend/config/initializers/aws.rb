@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'aws-sdk-s3'
+require 'aws-sdk-ses'
 
 Aws.config.update(
   region: ENV['AWS_REGION'],
