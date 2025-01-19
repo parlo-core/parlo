@@ -40,6 +40,12 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  config.action_mailer.delivery_method = :aws_sdk
+  config.action_mailer.aws_sdk_settings = {
+    region: ENV['AWS_REGION'] # Example: 'eu-north-1'
+  }
+  config.action_mailer.default_url_options = { host: 'app.parlo.dev' }
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
