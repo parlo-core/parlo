@@ -109,10 +109,41 @@ export const authProvider: AuthBindings = {
   getIdentity: async () => {
     const token = localStorage.getItem(TOKEN_KEY)
     if (token) {
-      return {
-        id: 1,
-        name: "John Doe",
-        avatar: "https://i.pravatar.cc/300"
+      try {
+        const response = await fetch(`${apiUrl}/users/current`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          return {
+            success: false,
+            error: {
+              name: "IdentityError",
+              message: errorData.message || "Failed to fetch user data"
+            }
+          }
+        }
+
+        const data = await response.json()
+        const { user } = data
+
+        return {
+          id: user.id,
+          firstName: user.first_name,
+          lastName: user.last_name
+        }
+      } catch (error) {
+        return {
+          error: {
+            name: "IdentityError",
+            message: "Failed to fetch user data"
+          }
+        }
       }
     }
     return null
