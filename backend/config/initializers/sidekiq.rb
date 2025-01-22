@@ -11,7 +11,7 @@ redis_config = {
 }
 
 if ENV['REDIS_PASSWORD'].present? && !ENV['REDIS_PASSWORD'].empty?
-  redis_config = redis_config.merge({password: ENV['REDIS_PASSWORD']})
+  redis_config = redis_config.merge({ password: ENV['REDIS_PASSWORD'] })
 end
 
 Sidekiq::Web.use(ActionDispatch::Cookies)
@@ -19,7 +19,7 @@ Sidekiq::Web.use(ActionDispatch::Session::CookieStore, key: '_interslice_session
 
 # Basic authentication for Sidekiq web interface
 if Rails.env.production? # Only enable auth in production
-  Sidekiq::Web.use Rack::Auth::Basic, "Protected Area" do |username, password|
+  Sidekiq::Web.use Rack::Auth::Basic, 'Protected Area' do |username, password|
     username == ENV['SIDEKIQ_USER'] && password == ENV['SIDEKIQ_PASSWORD']
   end
 end
