@@ -39,3 +39,5 @@ module App
     end
   end
 end
+
+require_relative '../lib/active_job/uniqueness/strategies/until_executed_patch'

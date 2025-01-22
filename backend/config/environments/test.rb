@@ -55,6 +55,8 @@ Rails.application.configure do
   # Tell Active Support which deprecation messages to disallow.
   config.active_support.disallowed_deprecation_warnings = []
 
+  config.active_job.queue_adapter = :test
+
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 
@@ -63,4 +65,6 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  Dotenv.load
 end
