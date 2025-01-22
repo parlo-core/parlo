@@ -9,6 +9,9 @@ require_relative '../config/environment'
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
+require 'sidekiq/testing'
+Sidekiq::Testing.fake!
+ActiveJob::Uniqueness.test_mode!
 
 DatabaseCleaner.allow_remote_database_url = true
 

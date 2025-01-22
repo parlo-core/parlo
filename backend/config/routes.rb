@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  mount Sidekiq::Web, at: '/sidekiq' if defined? Sidekiq::Web
+
   get 'health_status', to: 'application#health_status'
 
   namespace :admin do
