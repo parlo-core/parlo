@@ -55,10 +55,17 @@ export const dataProvider: DataProvider = {
 
     if (filters && filters.length > 0) {
       filters.forEach((filter) => {
-        if ("field" in filter && filter.operator === "eq") {
-          params.append(filter.field, filter.value);
+        if ("field" in filter && filter.operator === "contains") {
+          params.append(filter.field, filter.value)
         }
-      });
+      })
+    }
+
+    // Handle sorters (if applicable)
+    if (sorters && sorters.length > 0) {
+      sorters.forEach((sorter) => {
+        params.append(`sort[${sorter.field}]`, sorter.order)
+      })
     }
 
     const response = await fetcher(`${apiUrl}/${resource}?${params.toString()}`)
