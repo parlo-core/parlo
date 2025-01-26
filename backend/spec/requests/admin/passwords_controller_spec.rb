@@ -24,6 +24,12 @@ RSpec.describe Admin::PasswordsController, type: :request do
       end
     end
 
+    it 'enqueues SendEmailJob' do
+      expect do
+        post_with_token(nil, '/admin/passwords/forgot', params)
+      end.to have_enqueued_job(SendEmailJob)
+    end
+
     context 'when email is invalid' do
       let(:params) do
         {
