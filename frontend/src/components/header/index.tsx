@@ -11,6 +11,7 @@ import { useGetIdentity, useLogout } from "@refinedev/core"
 import { HamburgerMenu, RefineThemedLayoutV2HeaderProps } from "@refinedev/mui"
 import React, { useContext, useState } from "react"
 import { ColorModeContext } from "../../contexts/color-mode"
+import { SearchField } from "../searchField"
 
 type IUser = {
   id: number;
@@ -25,14 +26,11 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
 
   const { data: user } = useGetIdentity<IUser>()
   const { mutate: logout } = useLogout()
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
   const fullUserName =
-    user?.firstName && user?.lastName
-      ? `${user.firstName} ${user.lastName}`
-      : ""
+    user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : ""
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -53,16 +51,26 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
         <Stack
           direction="row"
           width="100%"
-          justifyContent="flex-end"
+          justifyContent="space-between"
           alignItems="center"
         >
           <HamburgerMenu />
+
+          {/* This Stack for SearchField will be placed on the left */}
+          { /* Only show the search field if necessary */}
           <Stack
             direction="row"
-            width="100%"
-            justifyContent="flex-end"
             alignItems="center"
+            sx={{
+              display: { xs: "none", sm: "flex" },
+              flexGrow: 1 // To push the username and toggle to the right
+            }}
           >
+            <SearchField />
+          </Stack>
+
+          {/* This Stack for Dark Mode toggle and User Menu stays on the right */}
+          <Stack direction="row" alignItems="center" spacing={2}>
             <IconButton
               color="inherit"
               onClick={() => {
@@ -115,3 +123,4 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
     </AppBar>
   )
 }
+

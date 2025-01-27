@@ -6,7 +6,7 @@ import {
   useDataGrid
 } from "@refinedev/mui"
 import React from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
 interface IContact {
   id: string;
@@ -22,6 +22,8 @@ interface ContactListProps {
 }
 
 export const ContactList = ({ listId }: ContactListProps) => {
+  const [searchParams] = useSearchParams()
+  const searchTerm = searchParams.get("search_term") || ""
   const navigate = useNavigate();
 
   const { dataGridProps } = useDataGrid<IContact>({
@@ -32,6 +34,11 @@ export const ContactList = ({ listId }: ContactListProps) => {
           field: "list_id",
           operator: "eq",
           value: listId
+        },
+        {
+          field: "search_term",
+          operator: "contains",
+          value: searchTerm
         }
       ]
     }

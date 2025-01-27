@@ -1,3 +1,4 @@
+import React from "react"
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
 import {
   DeleteButton,
@@ -6,7 +7,7 @@ import {
   ShowButton,
   useDataGrid
 } from "@refinedev/mui"
-import React from "react"
+import { useSearchParams } from "react-router-dom"
 
 interface IList {
   id: number;
@@ -16,7 +17,21 @@ interface IList {
 }
 
 export const ListList = () => {
-  const { dataGridProps } = useDataGrid<IList>({ resource: "lists" })
+  const [searchParams] = useSearchParams()
+  const searchTerm = searchParams.get("search_term") || ""
+
+  const { dataGridProps } = useDataGrid<IList>({
+    resource: "lists",
+    filters: {
+      permanent: [
+        {
+          field: "search_term",
+          operator: "contains",
+          value: searchTerm
+        }
+      ]
+    },
+  })
 
   const columns = React.useMemo<GridColDef<IList>[]>(
     () => [
