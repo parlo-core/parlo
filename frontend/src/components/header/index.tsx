@@ -26,14 +26,11 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
 
   const { data: user } = useGetIdentity<IUser>()
   const { mutate: logout } = useLogout()
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
   const fullUserName =
-    user?.firstName && user?.lastName
-      ? `${user.firstName} ${user.lastName}`
-      : ""
+    user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : ""
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -58,7 +55,21 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
           alignItems="center"
         >
           <HamburgerMenu />
-          <SearchField />
+
+          {/* This Stack for SearchField will be placed on the left */}
+          { /* Only show the search field if necessary */}
+          <Stack
+            direction="row"
+            alignItems="center"
+            sx={{
+              display: { xs: "none", sm: "flex" },
+              flexGrow: 1 // To push the username and toggle to the right
+            }}
+          >
+            <SearchField />
+          </Stack>
+
+          {/* This Stack for Dark Mode toggle and User Menu stays on the right */}
           <Stack direction="row" alignItems="center" spacing={2}>
             <IconButton
               color="inherit"
@@ -68,6 +79,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
             >
               {mode === "dark" ? <LightModeOutlined /> : <DarkModeOutlined />}
             </IconButton>
+
             {fullUserName && (
               <Stack
                 direction="row"
@@ -111,3 +123,4 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
     </AppBar>
   )
 }
+
