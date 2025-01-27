@@ -1,21 +1,17 @@
 import DarkModeOutlined from "@mui/icons-material/DarkModeOutlined"
 import LightModeOutlined from "@mui/icons-material/LightModeOutlined"
-import SearchIcon from "@mui/icons-material/Search"
 import AppBar from "@mui/material/AppBar"
 import IconButton from "@mui/material/IconButton"
-import InputAdornment from "@mui/material/InputAdornment"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import Stack from "@mui/material/Stack"
-import TextField from "@mui/material/TextField"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
 import { useGetIdentity, useLogout } from "@refinedev/core"
 import { HamburgerMenu, RefineThemedLayoutV2HeaderProps } from "@refinedev/mui"
 import React, { useContext, useState } from "react"
 import { ColorModeContext } from "../../contexts/color-mode"
-import { DebounceInput } from "react-debounce-input"
-import { useLocation, useNavigate } from "react-router-dom"
+import { SearchField } from "../searchField"
 
 type IUser = {
   id: number;
@@ -33,11 +29,6 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
-
-  const navigate = useNavigate()
-  const location = useLocation()
-
-  const isListPage = location.pathname === "/lists"
 
   const fullUserName =
     user?.firstName && user?.lastName
@@ -57,13 +48,6 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
     logout()
   }
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value
-    if (isListPage) {
-      navigate(`/lists?search_term=${value}`)
-    }
-  }
-
   return (
     <AppBar position={sticky ? "sticky" : "relative"}>
       <Toolbar>
@@ -74,44 +58,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
           alignItems="center"
         >
           <HamburgerMenu />
-          {isListPage && (
-            <DebounceInput
-              minLength={2}
-              debounceTimeout={500}
-              onChange={handleSearchChange}
-              element={TextField}
-              inputProps={{
-                placeholder: "Search lists...",
-                variant: "outlined",
-                size: "small",
-                sx: {
-                  width: "300px",
-                  height: "16px",
-                  backgroundColor: "white",
-                  borderRadius: "12px",
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "lightgray" // Default border color
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "gray" // Hover border color
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "darkblue", // Focus border color
-                      borderWidth: "4px" // Slightly thicker border when focused
-                    }
-                  }
-                },
-                InputProps: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon sx={{ color: "gray" }} />
-                    </InputAdornment>
-                  )
-                }
-              }}
-            />
-          )}
+          <SearchField />
           <Stack direction="row" alignItems="center" spacing={2}>
             <IconButton
               color="inherit"
